@@ -6,6 +6,7 @@ import Return as R exposing (Return)
 import Util.Types exposing (..)
 import Util.State exposing (..)
 import Util.Tiles exposing (randomTile)
+import Util.Lenses exposing (p1ScoreL, p2ScoreL, p1RoleL, p2RoleL, msgL, tilesL)
 import Score exposing (score)
 
 
@@ -30,43 +31,59 @@ updateGame action state =
 
                         Show s ->
                             if String.length s == 1 then
-                                InGame { state | message = DoCont <| String.concat [ string, s ] }
+                                state
+                                    |> msgL.set (DoCont <| String.concat [ string, s ])
+                                    |> InGame
                                     |> R.singleton
                                     |> R.command (delay (75 * millisecond) (MsgIn Empty))
                             else
-                                InGame { state | message = DoCont <| String.concat [ string, String.left 1 s ] }
+                                state
+                                    |> msgL.set (DoCont <| String.concat [ string, String.left 1 s ])
+                                    |> InGame
                                     |> R.singleton
                                     |> R.command (delay (75 * millisecond) (MsgIn <| Show <| String.dropLeft 1 s))
 
                 NoCont string ->
-                    R.singleton (InGame state)
+                    R.singleton <| InGame state
 
         MsgOut str ->
             case state.message of
                 DoCont string ->
                     case str of
                         Empty ->
-                            InGame { state | message = DoCont "" }
+                            state
+                                |> msgL.set (DoCont "")
+                                |> InGame
                                 |> R.singleton
 
                         Show s ->
                             if String.length s == 1 then
-                                InGame { state | message = DoCont s }
+                                state
+                                    |> msgL.set (DoCont s)
+                                    |> InGame
                                     |> ret (delay (25 * millisecond) (MsgOut <| Empty))
                             else
-                                InGame { state | message = DoCont s }
+                                state
+                                    |> msgL.set (DoCont s)
+                                    |> InGame
                                     |> ret (delay (25 * millisecond) (MsgOut <| Show <| String.dropRight 1 s))
 
                 NoCont string ->
-                    InGame state ! []
+                    R.singleton <| InGame state
 
         NoMsg ->
             case state.message of
                 DoCont str ->
-                    InGame { state | message = NoCont str } ! []
+                    state
+                        |> msgL.set (NoCont str)
+                        |> InGame
+                        |> R.singleton
 
                 NoCont str ->
-                    InGame { state | message = DoCont str } ! []
+                    state
+                        |> msgL.set (NoCont str)
+                        |> InGame
+                        |> R.singleton
 
         _ ->
             R.singleton <| InGame state
@@ -117,16 +134,16 @@ orderSecondMove x y tile state =
                     randomTile state.tiles
             in
                 if validateOrder x y state.board then
-                    InGame
-                        { state
-                            | board =
-                                state.board
-                                    |> Matrix.set x y newCell
-                                    |> removeHighlights
-                            , tiles = newTiles
-                            , turn = Chaos
-                            , initSeed = newTiles.seed
-                        }
+                    { state
+                        | board =
+                            state.board
+                                |> Matrix.set x y newCell
+                                |> removeHighlights
+                        , turn = Chaos
+                        , initSeed = newTiles.seed
+                    }
+                        |> tilesL.set newTiles
+                        |> InGame
                         |> ret (setMsg "Place new Tile in any Empty Cell.")
                 else
                     R.return (InGame state) (setMsg "You can't put a Tile on another Tile.")
@@ -163,42 +180,19 @@ updateChaos x y state =
                     R.return (InGame state) (setMsg "You can't put a Tile on another Tile.")
 
 
-type PlayerProxy
-    = Player1
-    | Player2
-
-
 makeBreak : InGameState -> Board -> PlayerProxy -> Int -> Return Action GameState
 makeBreak state newBoard plyr pts =
-    case plyr of
-        Player1 ->
-            let
-                player1 =
-                    state.player1
+    let
+        f l1 l2 =
+            state
+                |> l1.set pts
+                |> l2.set (switchRole <| l2.get state)
+                |> OutGame
+                |> R.singleton
+    in
+        case plyr of
+            Player1 ->
+                f p1ScoreL p2RoleL
 
-                player2 =
-                    state.player2
-            in
-                { state
-                    | board = newBoard
-                    , player1 = { player1 | score = pts }
-                    , player2 = { player2 | role = switchRole player2.role }
-                }
-                    |> OutGame
-                    |> R.singleton
-
-        Player2 ->
-            let
-                player1 =
-                    state.player1
-
-                player2 =
-                    state.player2
-            in
-                { state
-                    | board = newBoard
-                    , player1 = { player1 | role = switchRole player1.role }
-                    , player2 = { player2 | score = pts }
-                }
-                    |> OutGame
-                    |> R.singleton
+            Player2 ->
+                f p2ScoreL p1RoleL

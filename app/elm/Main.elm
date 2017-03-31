@@ -16,11 +16,10 @@ type alias Flags =
 
 init : Flags -> Return Action GameState
 init { randSeed } =
-    let
-        state =
-            ConfigState "" "" <| initialSeed randSeed
-    in
-        R.singleton <| Config state
+    initialSeed randSeed
+        |> ConfigState "" ""
+        |> Config
+        |> R.singleton
 
 
 view : GameState -> Html Action

@@ -9,6 +9,7 @@ import Dict
 import Return as R exposing (Return)
 import Random exposing (Seed, initialSeed)
 import Util.Types exposing (..)
+import Util.Lenses exposing (currL)
 
 
 {-| switchRole - Toggles Role
@@ -153,14 +154,12 @@ resetTiles =
 
 setNewTiles : Maybe Colour -> InGameState -> InGameState
 setNewTiles colour state =
-    let
-        tiles =
-            state.tiles
+    case colour of
+        Nothing ->
+            state
 
-        newTiles =
-            { tiles | current = colour }
-    in
-        { state | tiles = newTiles }
+        Just col ->
+            currL.set col state
 
 
 delay : Time -> msg -> Cmd msg

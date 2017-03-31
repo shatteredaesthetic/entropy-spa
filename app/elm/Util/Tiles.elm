@@ -3,6 +3,7 @@ module Util.Tiles exposing (randomTile)
 import Random exposing (Generator, int, Seed)
 import Dict
 import Util.Types exposing (..)
+import Util.Lenses exposing (tileSeedL, currTileL)
 import Util.View exposing (tileToString)
 
 
@@ -22,18 +23,14 @@ randomTile tile =
     in
         case Dict.get newKey tile.ref of
             Nothing ->
-                { tile
-                    | current = Just newTile
-                    , seed = newSeed
-                    , ref = Dict.insert newKey 1 tile.ref
-                }
+                { tile | ref = Dict.insert newKey 1 tile.ref }
+                    |> currTileL.set newTile
+                    |> tileSeedL.set newSeed
 
             Just val ->
                 if (val < 5) then
                     { tile
-                        | current = Just newTile
-                        , seed = newSeed
-                        , ref =
+                        | ref =
                             Dict.map
                                 (\k v ->
                                     if k == newKey then
@@ -43,6 +40,8 @@ randomTile tile =
                                 )
                                 tile.ref
                     }
+                        |> currTileL.set newTile
+                        |> tileSeedL.set newSeed
                 else
                     randomTile { tile | seed = newSeed }
 

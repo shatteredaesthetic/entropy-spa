@@ -3,7 +3,6 @@ module Util.Types exposing (..)
 import Matrix exposing (Matrix)
 import Random exposing (Seed)
 import Dict exposing (Dict)
-import Http
 
 
 type GameState
@@ -60,6 +59,11 @@ type alias Player =
     }
 
 
+type PlayerProxy
+    = Player1
+    | Player2
+
+
 type Role
     = Chaos
     | Order
@@ -96,4 +100,3 @@ type Action
     | NoMsg
     | SetPlayer1 String
     | SetPlayer2 String
-    | ScoreChaos (Result Http.Error ScoreReturn)

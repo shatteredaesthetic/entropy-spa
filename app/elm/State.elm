@@ -4,6 +4,7 @@ import Return as R exposing (Return)
 import Util.Types exposing (..)
 import Util.Tiles exposing (..)
 import Util.State exposing (makeBoard, resetTiles, switchRole, setMsg, ret)
+import Util.Lenses exposing (..)
 import Board.State exposing (updateGame)
 
 
@@ -24,46 +25,17 @@ updateBreak : Action -> InGameState -> Return Action GameState
 updateBreak action state =
     case action of
         NextRound ->
-            R.singleton <|
-                InGame
-                    { state
-                        | round = 2
-                        , turn = Chaos
-                        , board = makeBoard
-                        , tiles = resetTiles state.initSeed
-                    }
+            { state
+                | round = 2
+                , turn = Chaos
+                , board = makeBoard
+            }
+                |> tilesL.set (resetTiles state.initSeed)
+                |> InGame
+                |> R.singleton
 
         NewGame ->
-            Config (ConfigState "" "" state.initSeed) |> R.singleton
-
-        ScoreChaos (Ok payload) ->
-            let
-                plyr1 =
-                    state.player1
-
-                plyr2 =
-                    state.player2
-            in
-                case payload.round of
-                    1 ->
-                        let
-                            newPlyr =
-                                { plyr1
-                                    | score = payload.score
-                                    , role = switchRole plyr1.role
-                                }
-                        in
-                            R.singleton <| OutGame { state | player1 = newPlyr }
-
-                    _ ->
-                        let
-                            newPlyr =
-                                { plyr2
-                                    | score = payload.score
-                                    , role = switchRole plyr2.role
-                                }
-                        in
-                            R.singleton <| OutGame { state | player2 = newPlyr }
+            R.singleton <| Config (ConfigState "" "" state.initSeed)
 
         _ ->
             R.singleton <| OutGame state
