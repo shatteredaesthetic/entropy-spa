@@ -1,4 +1,4 @@
-module State exposing (updateState)
+module State exposing (..)
 
 import Return as R exposing (Return)
 import Util.Types exposing (..)

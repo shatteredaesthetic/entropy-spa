@@ -1,4 +1,4 @@
-module Board.State exposing (updateGame)
+module Board.State exposing (..)
 
 import Matrix exposing (Matrix)
 import Time exposing (millisecond)
