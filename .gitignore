@@ -1,0 +1,7 @@
+node_modules
+public
+elm-stuff
+.DS_Store
+OldScore.elm
+tests/Doc
+tests/elm-stuff
