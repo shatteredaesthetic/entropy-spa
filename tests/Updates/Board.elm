@@ -27,7 +27,7 @@ allBoardUpdateTests =
 
 updateChaosTests : Test
 updateChaosTests =
-    describe "Tests for updateChaos" <|
+    describe "Tests for updateChaos (and updateOrder, updateGame)" <|
         let
             newState =
                 updateChaos 0 1 mockInGameEmptyState
@@ -55,7 +55,7 @@ updateChaosTests =
 
 orderFirstMoveTests : Test
 orderFirstMoveTests =
-    describe "Tests for orderFirstMove" <|
+    describe "Tests for orderFirstMove (and updateOrder, updateGame)" <|
         let
             firstState =
                 updateChaos 0 1 mockInGameEmptyState
@@ -90,7 +90,7 @@ orderFirstMoveTests =
 
 orderSecondMoveTests : Test
 orderSecondMoveTests =
-    describe "Tests for orderSecondMove" <|
+    describe "Tests for orderSecondMove (and updateOrder, updateGame)" <|
         let
             firstState =
                 updateChaos 0 1 mockInGameEmptyState
@@ -117,7 +117,7 @@ orderSecondMoveTests =
                 Tuple.first newState
 
             ( badState, _ ) =
-                case firstState of
+                case secondState of
                     InGame st ->
                         orderSecondMove 1 0 Red st
 
@@ -178,7 +178,7 @@ mockInGameOrderSecondMoveState =
         state =
             case mockInGameOrderFirstMoveState of
                 InGame st ->
-                    st
+                    { st | turn = Chaos }
 
                 _ ->
                     mockInGameEmptyState
