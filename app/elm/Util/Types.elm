@@ -3,6 +3,7 @@ module Util.Types exposing (..)
 import Matrix exposing (Matrix)
 import Random exposing (Seed)
 import Dict exposing (Dict)
+import Message.Types as Message
 
 
 type GameState
@@ -24,20 +25,10 @@ type alias InGameState =
     , player2 : Player
     , turn : Role
     , tiles : TileState
-    , round : Int
-    , message : Cont
+    , nextRound : Bool
+    , message : Message.Model
     , initSeed : Seed
     }
-
-
-type Cont
-    = DoCont String
-    | NoCont String
-
-
-type Message
-    = Empty
-    | Show String
 
 
 type alias Board =
@@ -57,11 +48,6 @@ type alias Player =
     , role : Role
     , score : Int
     }
-
-
-type PlayerProxy
-    = Player1
-    | Player2
 
 
 type Role
@@ -95,8 +81,6 @@ type Action
     | NextRound
     | NewGame
     | Choose Int Int
-    | MsgIn Message
-    | MsgOut Message
-    | NoMsg
+    | Msg Message.Msg
     | SetPlayer1 String
     | SetPlayer2 String

@@ -6,6 +6,7 @@ import Util.Tiles exposing (..)
 import Util.State exposing (makeBoard, resetTiles, switchRole, setMsg, ret)
 import Util.Lenses exposing (..)
 import Board.State exposing (updateGame)
+import Message.State as Message
 
 
 updateState : Action -> GameState -> Return Action GameState
@@ -26,11 +27,11 @@ updateBreak action state =
     case action of
         NextRound ->
             { state
-                | round = 2
+                | nextRound = False
                 , turn = Chaos
-                , board = makeBoard
             }
-                |> tilesL.set (resetTiles state.initSeed)
+                |> boardL.set makeBoard
+                |> tilesL.set (resetTiles <| iSeedL.get state)
                 |> InGame
                 |> R.singleton
 
@@ -57,8 +58,8 @@ updateConfig action cfg =
                 , player2 = Player cfg.player2name Order 0
                 , turn = Chaos
                 , tiles = randomTile <| resetTiles cfg.initSeed
-                , message = DoCont ""
-                , round = 1
+                , message = Message.init
+                , nextRound = True
                 , initSeed = cfg.initSeed
                 }
                 |> ret (setMsg "Place tile in any empty square")

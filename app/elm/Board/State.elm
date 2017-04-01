@@ -1,12 +1,14 @@
 module Board.State exposing (..)
 
 import Matrix exposing (Matrix)
-import Time exposing (millisecond)
 import Return as R exposing (Return)
+import Return.Optics exposing (refractl)
+import Monocle.Lens exposing (modify)
 import Util.Types exposing (..)
 import Util.State exposing (..)
 import Util.Tiles exposing (randomTile)
-import Util.Lenses exposing (p1ScoreL, p2ScoreL, p1RoleL, p2RoleL, msgL, tilesL)
+import Util.Lenses exposing (..)
+import Message.State as Message
 import Score exposing (score)
 
 
@@ -21,69 +23,10 @@ updateGame action state =
                 Order ->
                     updateOrder x y state
 
-        MsgIn str ->
-            case state.message of
-                DoCont string ->
-                    case str of
-                        Empty ->
-                            R.singleton (InGame state)
-                                |> R.command (delay (3000 * millisecond) (MsgOut <| Show string))
-
-                        Show s ->
-                            if String.length s == 1 then
-                                state
-                                    |> msgL.set (DoCont <| String.concat [ string, s ])
-                                    |> InGame
-                                    |> R.singleton
-                                    |> R.command (delay (75 * millisecond) (MsgIn Empty))
-                            else
-                                state
-                                    |> msgL.set (DoCont <| String.concat [ string, String.left 1 s ])
-                                    |> InGame
-                                    |> R.singleton
-                                    |> R.command (delay (75 * millisecond) (MsgIn <| Show <| String.dropLeft 1 s))
-
-                NoCont string ->
-                    R.singleton <| InGame state
-
-        MsgOut str ->
-            case state.message of
-                DoCont string ->
-                    case str of
-                        Empty ->
-                            state
-                                |> msgL.set (DoCont "")
-                                |> InGame
-                                |> R.singleton
-
-                        Show s ->
-                            if String.length s == 1 then
-                                state
-                                    |> msgL.set (DoCont s)
-                                    |> InGame
-                                    |> ret (delay (25 * millisecond) (MsgOut <| Empty))
-                            else
-                                state
-                                    |> msgL.set (DoCont s)
-                                    |> InGame
-                                    |> ret (delay (25 * millisecond) (MsgOut <| Show <| String.dropRight 1 s))
-
-                NoCont string ->
-                    R.singleton <| InGame state
-
-        NoMsg ->
-            case state.message of
-                DoCont str ->
-                    state
-                        |> msgL.set (NoCont str)
-                        |> InGame
-                        |> R.singleton
-
-                NoCont str ->
-                    state
-                        |> msgL.set (NoCont str)
-                        |> InGame
-                        |> R.singleton
+        Msg msg ->
+            InGame state
+                |> R.singleton
+                |> (refractl msgL Msg <| Message.update msg)
 
         _ ->
             R.singleton <| InGame state
@@ -107,13 +50,9 @@ orderFirstMove x y state =
                 |> ret (setMsg "Select a Tile first.")
 
         Just colour ->
-            { state
-                | board =
-                    state.board
-                        |> Matrix.update x y (\cell -> { cell | colour = Nothing })
-                        |> highlightNeighbors x y
-            }
-                |> setNewTiles (Just colour)
+            state
+                |> modify boardL ((Matrix.update x y (\cell -> { cell | colour = Nothing })) >> (highlightNeighbors x y))
+                |> currL.set (Just colour)
                 |> InGame
                 |> ret (setMsg "Place tile in any Empty Cell.")
 
@@ -127,21 +66,13 @@ orderSecondMove x y tile state =
 
         Nothing ->
             let
-                newCell =
-                    Cell (Just tile) False x y
-
                 newTiles =
                     randomTile state.tiles
             in
                 if validateOrder x y state.board then
-                    { state
-                        | board =
-                            state.board
-                                |> Matrix.set x y newCell
-                                |> removeHighlights
-                        , turn = Chaos
-                        , initSeed = newTiles.seed
-                    }
+                    { state | turn = Chaos }
+                        |> modify boardL (Matrix.set x y (Cell (Just tile) False x y) >> removeHighlights)
+                        |> iSeedL.set newTiles.seed
                         |> tilesL.set newTiles
                         |> InGame
                         |> ret (setMsg "Place new Tile in any Empty Cell.")
@@ -152,47 +83,42 @@ orderSecondMove x y tile state =
 updateChaos : Int -> Int -> InGameState -> Return Action GameState
 updateChaos x y state =
     let
-        newCell =
-            Cell (state.tiles.current) False x y
-
         newBoard =
-            Matrix.set x y newCell state.board
+            Matrix.set x y (Cell (currL.get state) False x y) state.board
     in
         case isBoardFull newBoard of
             True ->
-                case state.round of
-                    1 ->
-                        makeBreak state newBoard Player1 <| score state.board
-
-                    _ ->
-                        makeBreak state newBoard Player2 <| score state.board
+                state
+                    |> boardL.set newBoard
+                    |> (if state.nextRound then
+                            makeBreak <| score newBoard
+                        else
+                            makeBreak <| score newBoard
+                       )
 
             False ->
                 if validateChaos x y state.board then
-                    { state
-                        | board = newBoard
-                        , turn = switchRole state.turn
-                    }
-                        |> setNewTiles Nothing
+                    { state | turn = Order }
+                        |> boardL.set newBoard
+                        |> currL.set Nothing
                         |> InGame
                         |> ret (setMsg "Select any Tile on Board.")
                 else
                     R.return (InGame state) (setMsg "You can't put a Tile on another Tile.")
 
 
-makeBreak : InGameState -> Board -> PlayerProxy -> Int -> Return Action GameState
-makeBreak state newBoard plyr pts =
+makeBreak : Int -> InGameState -> Return Action GameState
+makeBreak pts state =
     let
-        f l1 l2 =
+        f l1 l2 l3 =
             state
                 |> l1.set pts
                 |> l2.set (switchRole <| l2.get state)
+                |> l3.set (switchRole <| l3.get state)
                 |> OutGame
                 |> R.singleton
     in
-        case plyr of
-            Player1 ->
-                f p1ScoreL p2RoleL
-
-            Player2 ->
-                f p2ScoreL p1RoleL
+        if state.nextRound then
+            f p1ScoreL p1RoleL p2RoleL
+        else
+            f p2ScoreL p2RoleL p1RoleL

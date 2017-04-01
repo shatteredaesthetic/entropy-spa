@@ -4,54 +4,27 @@ import Monocle.Lens as Lens exposing (Lens)
 import Monocle.Optional as Op exposing (Optional)
 import Random exposing (Seed)
 import Util.Types exposing (..)
+import Message.Types as Message
 
 
 p1L : Lens InGameState Player
 p1L =
-    let
-        get p =
-            p.player1
-
-        set a p =
-            { p | player1 = a }
-    in
-        Lens get set
+    Lens .player1 <| \a p -> { p | player1 = a }
 
 
 p2L : Lens InGameState Player
 p2L =
-    let
-        get p =
-            p.player2
-
-        set a p =
-            { p | player2 = a }
-    in
-        Lens get set
+    Lens .player2 <| \a p -> { p | player2 = a }
 
 
 scoreL : Lens Player Int
 scoreL =
-    let
-        get p =
-            p.score
-
-        set s p =
-            { p | score = s }
-    in
-        Lens get set
+    Lens .score <| \s p -> { p | score = s }
 
 
 roleL : Lens Player Role
 roleL =
-    let
-        get p =
-            p.role
-
-        set r p =
-            { p | role = r }
-    in
-        Lens get set
+    Lens .role <| \r p -> { p | role = r }
 
 
 p1ScoreL : Lens InGameState Int
@@ -74,62 +47,64 @@ p2RoleL =
     Lens.compose p2L roleL
 
 
-msgL : Lens InGameState Cont
+msgL : Lens GameState Message.Model
 msgL =
     let
         get s =
-            s.message
+            case s of
+                InGame st ->
+                    st.message
+
+                _ ->
+                    { message = Message.Empty }
 
         set m s =
-            { s | message = m }
+            case s of
+                InGame st ->
+                    InGame { st | message = m }
+
+                OutGame st ->
+                    OutGame st
+
+                Config st ->
+                    Config st
     in
         Lens get set
 
 
 tilesL : Lens InGameState TileState
 tilesL =
-    let
-        get s =
-            s.tiles
-
-        set t s =
-            { s | tiles = t }
-    in
-        Lens get set
+    Lens .tiles <| \t s -> { s | tiles = t }
 
 
-currTileL : Optional TileState Colour
+currTileL : Lens TileState (Maybe Colour)
 currTileL =
-    let
-        get t =
-            t.current
-
-        set c t =
-            { t | current = Just c }
-    in
-        Optional get set
+    Lens .current <| \c t -> { t | current = c }
 
 
 tileSeedL : Lens TileState Seed
 tileSeedL =
-    let
-        get t =
-            t.seed
-
-        set s t =
-            { t | seed = s }
-    in
-        Lens get set
+    Lens .seed <| \s t -> { t | seed = s }
 
 
-currL : Optional InGameState Colour
+currL : Lens InGameState (Maybe Colour)
 currL =
-    composeOpt tilesL currTileL
+    Lens.compose tilesL currTileL
 
 
 seedL : Lens InGameState Seed
 seedL =
     Lens.compose tilesL tileSeedL
+
+
+iSeedL : Lens InGameState Seed
+iSeedL =
+    Lens .initSeed <| \s m -> { m | initSeed = s }
+
+
+boardL : Lens InGameState Board
+boardL =
+    Lens .board <| \b m -> { m | board = b }
 
 
 composeOpt : Lens a b -> Optional b c -> Optional a c
@@ -145,11 +120,8 @@ composeOpt lens opt =
                 x =
                     lens.get a
             in
-                case opt.getOption x of
-                    Nothing ->
-                        Nothing
-
-                    Just b ->
-                        Just b
+                a
+                    |> lens.get
+                    |> opt.getOption
     in
         Optional getOption set

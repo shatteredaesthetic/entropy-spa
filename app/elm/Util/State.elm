@@ -9,7 +9,7 @@ import Dict
 import Return as R exposing (Return)
 import Random exposing (Seed, initialSeed)
 import Util.Types exposing (..)
-import Util.Lenses exposing (currL)
+import Message.Types exposing (Msg(Print))
 
 
 {-| switchRole - Toggles Role
@@ -152,14 +152,9 @@ resetTiles =
     TileState Nothing Dict.empty
 
 
-setNewTiles : Maybe Colour -> InGameState -> InGameState
-setNewTiles colour state =
-    case colour of
-        Nothing ->
-            state
-
-        Just col ->
-            currL.set col state
+setMsg : String -> Cmd Action
+setMsg =
+    (Task.perform Msg) << succeed << Print
 
 
 delay : Time -> msg -> Cmd msg
@@ -169,12 +164,7 @@ delay time msg =
         |> Task.perform identity
 
 
-setMsg : String -> Cmd Action
-setMsg =
-    (Task.perform MsgIn) << succeed << Show
-
-
-ret : Cmd msg -> GameState -> Return msg GameState
+ret : Cmd msg -> a -> Return msg a
 ret =
     flip R.return
 
@@ -186,13 +176,3 @@ boardEmpty board =
         |> .data
         |> Array.toList
         |> List.all (\c -> c == Nothing)
-
-
-unwrapMsg : Cont -> String
-unwrapMsg message =
-    case message of
-        DoCont m ->
-            m
-
-        NoCont m ->
-            m
