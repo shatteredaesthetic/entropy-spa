@@ -8,7 +8,6 @@ import Maybe
 import Matrix exposing (Matrix)
 import Util.Types exposing (..)
 import Util.View exposing (..)
-import Util.State exposing (unwrapMsg)
 import Board.Styles exposing (..)
 
 
@@ -20,7 +19,6 @@ gameView state =
         ]
         [ header state
         , board state.board
-        , footer state.message
         ]
 
 
@@ -156,15 +154,3 @@ makeBoardRow board y =
             [ class "board-row"
             , styleList [ flexStyle, columnStyle, (flex 1 0) ]
             ]
-
-
-footer : Cont -> Html Action
-footer message =
-    div
-        [ class "game-footer"
-        , styleList [ flexStyle, centerStyle, footerStyle, (flex 1 0) ]
-        ]
-        [ div
-            [ class "game-footer-inner" ]
-            [ text <| ">  " ++ (unwrapMsg message) ]
-        ]

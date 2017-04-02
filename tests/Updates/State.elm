@@ -7,6 +7,7 @@ import Random exposing (initialSeed)
 import Return as R exposing (Return)
 import State exposing (..)
 import Util.Types exposing (..)
+import Board.State exposing (updateChaos)
 
 
 allStateUpdateTests : Test
@@ -29,22 +30,41 @@ updateConfigTests =
             \() ->
                 Expect.equal mockConfigP2 <|
                     updateConfig (SetPlayer2 "2") mockEmptyConfig
-          {- }, test "Starts game with fresh InGameState" <|
-             \() ->
-                 Expect.equal mockStartState <|
-                     updateConfig StartGame mockFullConfig
-          -}
+        , test "Starts game with fresh InGameState" <|
+            \() ->
+                Expect.equal mockStartState <|
+                    Tuple.first <|
+                        updateConfig StartGame mockFullConfig
         ]
 
 
 updateBreakTests : Test
 updateBreakTests =
-    describe "Tests for updateBreak"
-        [ test "NewGame sets up an empth Config" <|
-            \() ->
-                Expect.equal (R.singleton <| Config mockEmptyConfig) <|
-                    updateBreak NewGame mockInGameEmptyState
-        ]
+    let
+        break =
+            updateChaos 0 1 mockInGameOneMoveState
+                |> Tuple.first
+
+        newState =
+            case break of
+                OutGame st ->
+                    st
+
+                _ ->
+                    mockInGameEmptyState
+    in
+        describe "Tests for updateBreak"
+            [ test "NewGame sets up an empty Config" <|
+                \() ->
+                    Expect.equal (R.singleton <| Config mockEmptyConfig) <|
+                        updateBreak NewGame mockInGameEmptyState
+              {- }, test "NextRound renders into a new round with player's score" <|
+                 \() ->
+                     Expect.equal mockNewRoundState <|
+                         Tuple.first <|
+                             updateBreak NextRound newState
+              -}
+            ]
 
 
 updateStateTests : Test
@@ -81,6 +101,6 @@ mockConfigP2 =
             }
 
 
-mockStartState : Return Action GameState
+mockStartState : GameState
 mockStartState =
-    R.singleton <| InGame mockInGameEmptyState
+    InGame mockInGameEmptyState

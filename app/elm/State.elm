@@ -31,7 +31,7 @@ updateBreak action state =
                 , turn = Chaos
             }
                 |> boardL.set makeBoard
-                |> tilesL.set (resetTiles <| iSeedL.get state)
+                |> tilesL.set (randomTile <| resetTiles <| iSeedL.get state)
                 |> InGame
                 |> R.singleton
 

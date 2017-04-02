@@ -27,7 +27,7 @@ allBoardUpdateTests =
 
 updateChaosTests : Test
 updateChaosTests =
-    describe "Tests for updateChaos (and updateOrder, updateGame)" <|
+    describe "Tests for updateChaos (and updateGame)" <|
         let
             newState =
                 updateChaos 0 1 mockInGameEmptyState
@@ -38,8 +38,7 @@ updateChaosTests =
             ( model_, _ ) =
                 case model of
                     InGame m ->
-                        m
-                            |> updateChaos 0 1
+                        updateChaos 0 1 m
 
                     _ ->
                         model ! []
@@ -50,6 +49,16 @@ updateChaosTests =
             , test "updateChaos does not render an incorrect move" <|
                 \() ->
                     Expect.equal model model_
+            , test "updateOrder works as expected (from updateChaos)" <|
+                \() ->
+                    Expect.equal mockInGameChaosMoveState <|
+                        Tuple.first <|
+                            updateGame (Choose 0 1) mockInGameEmptyState
+            , test "renders to OutGame state when board is full" <|
+                \() ->
+                    Expect.equal mockBreakState <|
+                        Tuple.first <|
+                            updateChaos 0 1 mockInGameOneMoveState
             ]
 
 
@@ -63,13 +72,16 @@ orderFirstMoveTests =
             newState =
                 case Tuple.first firstState of
                     InGame st ->
-                        orderFirstMove 0 1 <| st
+                        st
 
                     _ ->
-                        Tuple.first firstState ! []
+                        mockInGameEmptyState
+
+            m =
+                orderFirstMove 0 1 newState
 
             model =
-                Tuple.first newState
+                Tuple.first m
 
             ( badState, _ ) =
                 case mockInGameChaosMoveState of
@@ -85,6 +97,17 @@ orderFirstMoveTests =
             , test "updateOderFirstMove won't render illegal moves" <|
                 \() ->
                     Expect.equal badState <| Tuple.first firstState
+            , test "updateOrder works as expected (from orderFirstMove)" <|
+                \() ->
+                    Expect.equal mockInGameOrderFirstMoveState <|
+                        Tuple.first <|
+                            updateOrder 0 1 <|
+                                newState
+            , test "updateGame works as expected (from orderFirstMove)" <|
+                \() ->
+                    Expect.equal mockInGameOrderFirstMoveState <|
+                        Tuple.first <|
+                            updateGame (Choose 0 1) newState
             ]
 
 
@@ -108,13 +131,16 @@ orderSecondMoveTests =
             newState =
                 case secondState of
                     InGame st ->
-                        orderSecondMove 0 0 Red st
+                        st
 
                     _ ->
-                        secondState ! []
+                        mockInGameEmptyState
+
+            m =
+                orderSecondMove 0 0 Red newState
 
             model =
-                Tuple.first newState
+                Tuple.first m
 
             ( badState, _ ) =
                 case secondState of
@@ -130,6 +156,17 @@ orderSecondMoveTests =
             , test "updateOrderSecondMove won't render illegal moves" <|
                 \() ->
                     Expect.equal badState secondState
+            , test "updateOrder works as expected (from orderSecondMove)" <|
+                \() ->
+                    Expect.equal mockInGameOrderSecondMoveState <|
+                        Tuple.first <|
+                            updateOrder 0 0 <|
+                                newState
+            , test "updateGame works as expected (from orderSecondMove)" <|
+                \() ->
+                    Expect.equal mockInGameOrderSecondMoveState <|
+                        Tuple.first <|
+                            updateGame (Choose 0 0) newState
             ]
 
 

@@ -90,6 +90,7 @@ updateChaos x y state =
             True ->
                 state
                     |> boardL.set newBoard
+                    |> currL.set Nothing
                     |> (if state.nextRound then
                             makeBreak <| score newBoard
                         else
@@ -110,7 +111,7 @@ updateChaos x y state =
 makeBreak : Int -> InGameState -> Return Action GameState
 makeBreak pts state =
     let
-        f l1 l2 l3 =
+        f ( l1, l2 ) l3 =
             state
                 |> l1.set pts
                 |> l2.set (switchRole <| l2.get state)
@@ -119,6 +120,6 @@ makeBreak pts state =
                 |> R.singleton
     in
         if state.nextRound then
-            f p1ScoreL p1RoleL p2RoleL
+            f ( p1ScoreL, p1RoleL ) p2RoleL
         else
-            f p2ScoreL p2RoleL p1RoleL
+            f ( p2ScoreL, p2RoleL ) p1RoleL
