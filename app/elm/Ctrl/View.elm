@@ -1,7 +1,7 @@
 module Ctrl.View exposing (..)
 
 import Html exposing (Html, div, text)
-import Html.Attributes exposing (style, class)
+import Html.Attributes exposing (style, id)
 import Html.Events exposing (onClick)
 import Util.View exposing (..)
 import Ctrl.Types exposing (..)
@@ -11,7 +11,7 @@ import Util.Types exposing (..)
 gameBtns : Html Action
 gameBtns =
     div
-        [ class "btn-container game-btns"
+        [ id "btn-container game-btns"
         , styleList [ flexStyle, centerStyle, columnStyle, stretchStyle ]
         ]
         [ restartBtn
@@ -22,7 +22,7 @@ gameBtns =
 breakBtns : Html Action
 breakBtns =
     div
-        [ class "btn-container break-btns"
+        [ id "btn-container break-btns"
         , styleList [ flexStyle, stretchStyle, jcStyle "space-around", aiStyle "center" ]
         ]
         [ resetBtn
@@ -33,7 +33,7 @@ breakBtns =
 configBtn : Html Action
 configBtn =
     div
-        [ class "btn-container cfg-btns"
+        [ id "btn-container cfg-btns"
         , styleList [ flexStyle, centerStyle, bgColor "#d8d8d8", flex 1 0 ]
         ]
         [ startBtn ]
@@ -42,7 +42,7 @@ configBtn =
 resetBtn : Html Action
 resetBtn =
     div
-        [ class "reset-btn"
+        [ id "reset-btn"
         , styleList [ flexStyle, centerStyle, btnStyle ]
         , onClick (Btn Reset)
         ]
@@ -52,7 +52,7 @@ resetBtn =
 restartBtn : Html Action
 restartBtn =
     div
-        [ class "restart-btn"
+        [ id "restart-btn"
         , styleList [ flexStyle, centerStyle, btnStyle ]
         , onClick (Btn Restart)
         ]
@@ -62,7 +62,7 @@ restartBtn =
 roundBtn : Html Action
 roundBtn =
     div
-        [ class "next-round-btn"
+        [ id "next-round-btn"
         , styleList [ flexStyle, centerStyle, btnStyle ]
         , onClick (Btn NextRound)
         ]
@@ -72,7 +72,7 @@ roundBtn =
 startBtn : Html Action
 startBtn =
     div
-        [ class "start-game-btn"
+        [ id "start-game-btn"
         , styleList [ flexStyle, centerStyle, btnStyle, styledBtnStyle ]
         , onClick (Btn StartGame)
         ]

@@ -1,7 +1,7 @@
 module Game.Player.View exposing (..)
 
 import Html exposing (Html, div, text)
-import Html.Attributes exposing (style, class)
+import Html.Attributes exposing (style, id, class)
 import Util.Types exposing (..)
 import Util.View exposing (..)
 import Game.Player.Styles exposing (..)
@@ -10,15 +10,15 @@ import Game.Player.Styles exposing (..)
 player1Header : InGameState -> Html Action
 player1Header state =
     div
-        [ class "p1-container"
-        , styleList [ flexStyle, columnStyle, flex 1 0 ]
+        [ id "p1-container"
+        , styleList [ flexStyle, columnStyle, bgColor "#d8d8d8", flex 1 0 ]
         ]
         [ div
-            [ class "player-top-container"
+            [ class "top-container"
             , styleList [ flexStyle, columnStyle, aiStyle "flex-start", flex 3 0 ]
             ]
             [ div
-                [ class "player-token"
+                [ id "player1-token"
                 , styleList [ flexStyle, aiStyle "flex-end" ]
                 ]
                 [ playerToken state.player1 ]
@@ -58,15 +58,15 @@ player1Header state =
 player2Header : InGameState -> Html Action
 player2Header state =
     div
-        [ class "p2-container"
-        , styleList [ flexStyle, columnStyle, flex 1 0 ]
+        [ id "p2-container"
+        , styleList [ flexStyle, columnStyle, bgColor "#d8d8d8", flex 1 0 ]
         ]
         [ div
             [ class "player-top-container"
             , styleList [ flexStyle, columnStyle, aiStyle "flex-start", flex 3 0 ]
             ]
             [ div
-                [ class "player-token"
+                [ id "player2-token"
                 , styleList [ flexStyle, aiStyle "flex-start" ]
                 ]
                 [ playerToken state.player2 ]
@@ -96,10 +96,10 @@ player2Header state =
             [ div
                 [ class "btn-container" ]
                 [ div
-                    [ class "restart-btn" ]
+                    [ id "restart-btn" ]
                     [ text "Restart" ]
                 , div
-                    [ class "reset-btn" ]
+                    [ id "reset-btn" ]
                     [ text "Reset" ]
                 ]
             ]

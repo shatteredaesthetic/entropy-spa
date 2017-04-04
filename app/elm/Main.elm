@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Html exposing (Html, div)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (id)
 import Random exposing (initialSeed)
 import Return as R exposing (Return)
 import Break.View exposing (breakUI)
@@ -41,7 +41,7 @@ view gameState =
                     breakUI inGameState
     in
         div
-            [ class "container"
+            [ id "container"
             , styleList [ flexStyle, outerContainer, [ "border" => "1px solid red" ] ]
             ]
             [ content ]

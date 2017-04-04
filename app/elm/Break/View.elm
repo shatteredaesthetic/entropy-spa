@@ -1,7 +1,7 @@
 module Break.View exposing (breakUI)
 
 import Html exposing (Html, div, h3, text)
-import Html.Attributes exposing (class, style)
+import Html.Attributes exposing (id, style)
 import Util.Types exposing (..)
 import Util.View exposing (..)
 import Game.Board.View as Board
@@ -11,7 +11,7 @@ import Ctrl.View exposing (breakBtns)
 breakUI : InGameState -> Html Action
 breakUI state =
     div
-        [ class "break-container"
+        [ id "break-container"
         , styleList [ flexStyle, stretchStyle ]
         ]
         [ player1Panel state
@@ -23,11 +23,11 @@ breakUI state =
 middlePanel : Board -> Html Action
 middlePanel board =
     div
-        [ class "middle-panel"
+        [ id "middle-panel"
         , styleList [ flexStyle, columnStyle ]
         ]
         [ div
-            [ class "board-panel"
+            [ id "board-panel"
             , styleList [ flexStyle, centerStyle, ht "70%" ]
             ]
             [ Board.view board ]
@@ -38,16 +38,16 @@ middlePanel board =
 player1Panel : InGameState -> Html Action
 player1Panel state =
     div
-        [ class "player-panel"
+        [ id "player-panel"
         , styleList [ flexStyle, columnStyle, wd "25%" ]
         ]
         [ div
-            [ class "player-name"
+            [ id "player-name"
             , styleList [ flexStyle, aiStyle "flex-end" ]
             ]
             [ text state.player1.name ]
         , div
-            [ class "player-score"
+            [ id "player-score"
             , styleList [ flexStyle, centerStyle ]
             ]
             [ text <| toString state.player1.score ]
@@ -57,16 +57,16 @@ player1Panel state =
 player2Panel : InGameState -> Html Action
 player2Panel state =
     div
-        [ class "player-panel"
+        [ id "player-panel"
         , styleList [ flexStyle, columnStyle, wd "25%" ]
         ]
         [ div
-            [ class "player-name"
+            [ id "player-name"
             , styleList [ flexStyle, aiStyle "flex-start" ]
             ]
             [ text state.player2.name ]
         , div
-            [ class "player-score"
+            [ id "player-score"
             , styleList [ flexStyle, centerStyle ]
             ]
             [ text <| toString state.player2.score ]

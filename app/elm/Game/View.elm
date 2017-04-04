@@ -1,7 +1,7 @@
 module Game.View exposing (gameUI)
 
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (id)
 import Util.Types exposing (..)
 import Util.View exposing (..)
 import Game.Player.View exposing (..)
@@ -12,7 +12,7 @@ import Game.Board.View as Board
 gameUI : InGameState -> Html Action
 gameUI state =
     div
-        [ class "game-container"
+        [ id "game-container"
         , styleList [ flexStyle, stretchStyle ]
         ]
         [ player1Header state
@@ -24,8 +24,8 @@ gameUI state =
 gameView : InGameState -> Html Action
 gameView state =
     div
-        [ class "game-middle-panel"
-        , styleList [ flexStyle, columnStyle, jcStyle "space-around" ]
+        [ id "game-middle-panel"
+        , styleList [ flexStyle, columnStyle, jcStyle "space-around", flex 3 0 ]
         ]
         [ Board.view state.board
         , Message.view state.message

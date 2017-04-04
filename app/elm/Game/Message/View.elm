@@ -1,7 +1,7 @@
 module Game.Message.View exposing (..)
 
 import Html exposing (Html, div, text)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (id)
 import Game.Message.Types exposing (..)
 import Util.View exposing (..)
 import Util.Types exposing (..)
@@ -25,11 +25,11 @@ view model =
             styleList [ flexStyle, centerStyle, footerStyle, bgColor "#1e0812", flex 1 0 ]
     in
         div
-            [ class "game-footer"
+            [ id "game-footer"
             , style_
             ]
             [ div
-                [ class "game-footer-inner" ]
+                [ id "game-footer-inner" ]
                 [ text <| ">  " ++ content ]
             ]
 

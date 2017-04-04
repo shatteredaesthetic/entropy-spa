@@ -1,7 +1,7 @@
 module Game.Board.View exposing (view)
 
 import Html exposing (..)
-import Html.Attributes exposing (class, style)
+import Html.Attributes exposing (id, style)
 import Html.Events exposing (onClick)
 import Array
 import Maybe
@@ -21,7 +21,7 @@ view board =
             List.range 0 4
                 |> List.map (makeBoardRow newBoard)
                 |> div
-                    [ class "game-board-container"
+                    [ id "game-board-container"
                     , styleList [ flexStyle, boardContainerStyle ]
                     ]
 
@@ -43,12 +43,12 @@ cellView cell =
             styleList [ flexStyle, centerStyle, rel, tileStyle, highlightStyle cell, flex 1 0 ]
     in
         div
-            [ class "board-cell"
+            [ id "board-cell"
             , outerStyle
             , onClick (Choose cell.x cell.y)
             ]
             [ div
-                [ class "cell-btn"
+                [ id "cell-btn"
                 , styleList [ cellBtnStyle, bgStyle ]
                 ]
                 []
@@ -61,6 +61,6 @@ makeBoardRow board y =
         |> Maybe.map Array.toList
         |> Maybe.withDefault []
         |> div
-            [ class "board-row"
+            [ id "board-row"
             , styleList [ flexStyle, columnStyle, flex 1 0 ]
             ]
