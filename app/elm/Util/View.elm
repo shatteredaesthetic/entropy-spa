@@ -54,6 +54,9 @@ tileToString colour =
         Violet ->
             "violet"
 
+        NoTile ->
+            "EMPTY"
+
 
 getHexColor : Colour -> String
 getHexColor colour =
@@ -73,6 +76,9 @@ getHexColor colour =
         Violet ->
             "#da1ee8"
 
+        NoTile ->
+            "#1e0812"
+
 
 flex : Int -> Int -> List Attr
 flex x y =
@@ -86,14 +92,17 @@ flexStyle =
 
 centerStyle : List Attr
 centerStyle =
-    [ "justify-content" => "center"
-    , "align-items" => "center"
-    ]
+    List.concat [ jcStyle "center", aiStyle "center" ]
 
 
 btnStyle : List Attr
 btnStyle =
     [ "cursor" => "pointer" ]
+
+
+bgColor : String -> List Attr
+bgColor str =
+    [ "background" => str ]
 
 
 columnStyle : List Attr
@@ -103,14 +112,17 @@ columnStyle =
 
 stretchStyle : List Attr
 stretchStyle =
-    [ "width" => "100%"
-    , "height" => "100%"
-    ]
+    List.concat [ wd "100%", ht "100%" ]
 
 
-jcsbStyle : List Attr
-jcsbStyle =
-    [ "justify-content" => "space-between" ]
+jcStyle : String -> List Attr
+jcStyle str =
+    [ "justify-content" => str ]
+
+
+aiStyle : String -> List Attr
+aiStyle str =
+    [ "align-items" => str ]
 
 
 styledBtnStyle : List Attr
@@ -121,3 +133,28 @@ styledBtnStyle =
     , "color" => "white"
     , "border-radius" => "5px"
     ]
+
+
+ht : String -> List Attr
+ht h =
+    [ "height" => h ]
+
+
+wd : String -> List Attr
+wd w =
+    [ "width" => w ]
+
+
+rel : List Attr
+rel =
+    [ "position" => "relative" ]
+
+
+outerContainer : List Attr
+outerContainer =
+    List.concat [ wd "100vw", ht "100vh", bgColor "#1e0812" ]
+
+
+txtCol : String -> List Attr
+txtCol str =
+    [ "color" => str ]

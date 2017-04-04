@@ -3,6 +3,6 @@
   "tests" : [
     "Util.View",
     "Util.State",
-    "Score"
+    "Util.Score"
   ]
 }

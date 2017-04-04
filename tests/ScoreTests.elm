@@ -3,7 +3,7 @@ module ScoreTests exposing (allScoreTests)
 import Test exposing (..)
 import Expect
 import TestUtil exposing (..)
-import Score exposing (score)
+import Util.Score exposing (score)
 
 
 allScoreTests : Test

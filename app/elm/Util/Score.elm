@@ -1,4 +1,4 @@
-module Score exposing (..)
+module Util.Score exposing (..)
 
 import Util.Types exposing (..)
 import List.Extra exposing (groupsOfWithStep, groupsOf)
@@ -30,7 +30,7 @@ convertBoard : MatrixGetter -> Board -> List String
 convertBoard f matrix =
     let
         m =
-            Matrix.map (.colour >> (Maybe.withDefault Red)) matrix
+            Matrix.map .colour matrix
 
         toLetter colour =
             String.left 1 <| tileToString colour

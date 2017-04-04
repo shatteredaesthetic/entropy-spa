@@ -9,7 +9,7 @@ import Dict
 import Return as R exposing (Return)
 import Random exposing (Seed, initialSeed)
 import Util.Types exposing (..)
-import Message.Types exposing (Msg(Print))
+import Game.Message.Types exposing (Msg(Print))
 
 
 {-| switchRole - Toggles Role
@@ -31,18 +31,18 @@ switchRole role =
 {-| getCellColour - gets the Maybe Colour out of a cell's .colour
     >>> import Util.Types exposing (..)
     >>> import Matrix
-    >>> getCellColour 0 0 <| Matrix.set 0 0 (Cell (Just Red) False 0 0) <| makeBoard
-    Just Red
+    >>> getCellColour 0 0 <| Matrix.set 0 0 (Cell Red False 0 0) <| makeBoard
+    Red
     >>> getCellColour 4 4 <| makeBoard
-    Nothing
-    >>> getCellColour 2 3 <| Matrix.set 2 3 (Cell (Just Orange) False 2 3) <| makeBoard
-    Just Orange
+    NoTile
+    >>> getCellColour 2 3 <| Matrix.set 2 3 (Cell Orange False 2 3) <| makeBoard
+    Orange
 -}
-getCellColour : Int -> Int -> Board -> Maybe Colour
+getCellColour : Int -> Int -> Board -> Colour
 getCellColour x y board =
     case Matrix.get x y board of
         Nothing ->
-            Nothing
+            NoTile
 
         Just cell ->
             cell.colour
@@ -53,14 +53,14 @@ getCellColour x y board =
     >>> import Matrix
     >>> boardEmpty <| makeBoard
     True
-    >>> boardEmpty <| Matrix.set 0 0 (Cell (Just Red) False 0 0) <| makeBoard
+    >>> boardEmpty <| Matrix.set 0 0 (Cell Red False 0 0) <| makeBoard
     False
 -}
 makeBoard : Board
 makeBoard =
     let
         m =
-            Matrix.repeat 5 5 Nothing
+            Matrix.repeat 5 5 NoTile
 
         f x y el =
             { x = x
@@ -80,13 +80,13 @@ makeBoard =
 -}
 isBoardFull : Board -> Bool
 isBoardFull =
-    Array.isEmpty << Matrix.filter (\cell -> cell.colour == Nothing)
+    Array.isEmpty << Matrix.filter (\cell -> cell.colour == NoTile)
 
 
 {-| validateOrder - Validates Order's move, ie. if the cell is highlighted
     >>> import Util.Types exposing (..)
     >>> import Matrix
-    >>> validateOrder 0 0 <| Matrix.set 0 0 (Cell Nothing True 0 0) <| makeBoard
+    >>> validateOrder 0 0 <| Matrix.set 0 0 (Cell NoTile True 0 0) <| makeBoard
     True
     >>> validateOrder 1 1 <| makeBoard
     False
@@ -106,7 +106,7 @@ validateOrder x y board =
     >>> import Matrix
     >>> validateChaos 0 0 <| makeBoard
     True
-    >>> validateChaos 1 1 <| Matrix.set 1 1 (Cell (Just Red) False 1 1) <| makeBoard
+    >>> validateChaos 1 1 <| Matrix.set 1 1 (Cell Red False 1 1) <| makeBoard
     False
 -}
 validateChaos : Int -> Int -> Board -> Bool
@@ -117,11 +117,11 @@ validateChaos x y board =
 
         Just cell ->
             case cell.colour of
-                Just _ ->
-                    False
-
-                Nothing ->
+                NoTile ->
                     True
+
+                _ ->
+                    False
 
 
 highlightNeighbors : Int -> Int -> Board -> Board
@@ -129,10 +129,10 @@ highlightNeighbors x y board =
     let
         highlightCell cell =
             case cell.colour of
-                Nothing ->
+                NoTile ->
                     { cell | highlight = not cell.highlight }
 
-                Just _ ->
+                _ ->
                     cell
     in
         board
@@ -149,7 +149,7 @@ removeHighlights =
 
 resetTiles : Seed -> TileState
 resetTiles =
-    TileState Nothing Dict.empty
+    TileState NoTile Dict.empty
 
 
 setMsg : String -> Cmd Action
@@ -175,4 +175,4 @@ boardEmpty board =
         |> Matrix.map .colour
         |> .data
         |> Array.toList
-        |> List.all (\c -> c == Nothing)
+        |> List.all (\c -> c == NoTile)

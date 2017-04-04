@@ -1,8 +1,8 @@
-module Message.View exposing (..)
+module Game.Message.View exposing (..)
 
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (class)
-import Message.Types exposing (..)
+import Game.Message.Types exposing (..)
 import Util.View exposing (..)
 import Util.Types exposing (..)
 
@@ -20,10 +20,13 @@ view model =
 
                 Removing m ->
                     m.show
+
+        style_ =
+            styleList [ flexStyle, centerStyle, footerStyle, bgColor "#1e0812", flex 1 0 ]
     in
         div
             [ class "game-footer"
-            , styleList [ flexStyle, centerStyle, footerStyle, (flex 1 0) ]
+            , style_
             ]
             [ div
                 [ class "game-footer-inner" ]
@@ -33,9 +36,7 @@ view model =
 
 footerStyle : List Attr
 footerStyle =
-    [ "background" => "#1e0812"
-    , "color" => "#fafafa"
+    [ "color" => "#fafafa"
     , "font-family" => "Monospace"
     , "box-shadow" => "inset 0px 3px 3px 0px #d8d8d8"
-    , "height" => "10vh"
     ]

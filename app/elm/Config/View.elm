@@ -1,93 +1,91 @@
 module Config.View exposing (configUI)
 
-import Html exposing (Html, Attribute, label, div, h1, h2, h3, text, p, a, input)
-import Html.Attributes exposing (style, class, for, name, href, type_)
-import Html.Events exposing (onInput, onClick)
+import Html exposing (Html, label, div, h1, h2, h3, text, p, a, input)
+import Html.Attributes exposing (style, class, for, name, href, value, type_)
+import Html.Events exposing (onInput)
 import Util.Types exposing (..)
 import Util.View exposing (..)
 import Config.Styles exposing (..)
+import Ctrl.View exposing (configBtn)
 
 
 configUI : ConfigState -> Html Action
-configUI cfg =
+configUI state =
     div
-        [ class "config-container"
-        , styleList [ flexStyle, stretchStyle, columnStyle ]
-        ]
-        [ header cfg
-        , div
-            [ class "config-instructions"
-            , styleList [ flexStyle, columnStyle, (flex 1 0) ]
-            ]
-            [ h3
-                [ class "config-instructions-link" ]
-                [ text "From "
-                , a
-                    [ style anchorStyle
-                    , href "https://boardgamegeek.com/boardgame/1329/hyle"
-                    ]
-                    [ text "BoardGameGeek" ]
-                ]
-            , instructions
-            ]
-        ]
-
-
-header : ConfigState -> Html Action
-header cfg =
-    div
-        [ class "config-top-container"
-        , styleList [ flexStyle, columnStyle, topContainerStyle, (flex 3 0) ]
+        [ class "config-outer-container"
+        , styleList [ flexStyle, centerStyle, stretchStyle ]
         ]
         [ div
-            [ class "config-form"
-            , styleList [ flexStyle, jcsbStyle, (flex 1 0) ]
+            [ class "config-container"
+            , styleList [ flexStyle, columnStyle, ht "100%", wd "70%", jcStyle "space-around", aiStyle "stretch" ]
             ]
-            [ div
-                [ class "config-leftside"
-                , styleList [ flexStyle, centerStyle, columnStyle, alignStyle, (flex 2 0) ]
-                ]
-                [ label
-                    [ for "player1-name"
-                    , style labelStyle
-                    ]
-                    [ text "Player 1 Name:" ]
-                , input
-                    [ type_ "text"
-                    , name "player1-name"
-                    , onInput SetPlayer1
-                    ]
-                    []
-                ]
-            , div
-                [ class "config-centerside"
-                , styleList [ flexStyle, centerBtnStyle, columnStyle, (flex 1 0) ]
-                ]
-                [ h2 [ styleList [ flexStyle, centerStyle ] ] [ text "Entropy" ]
-                , div
-                    [ class "game-start-btn"
-                    , styleList [ flexStyle, centerStyle, btnStyle, styledBtnStyle ]
-                    , onClick StartGame
-                    ]
-                    [ text "Start Game" ]
-                ]
-            , div
-                [ class "config-rightside"
-                , styleList [ flexStyle, centerStyle, columnStyle, alignStyle, (flex 2 0) ]
-                ]
-                [ label
-                    [ for "player2-name"
-                    , style labelStyle
-                    ]
-                    [ text "Player 2 Name:" ]
-                , input
-                    [ type_ "text"
-                    , name "player2-name"
-                    , onInput SetPlayer2
-                    ]
-                    []
-                ]
+            [ div [ styleList [ flexStyle, centerStyle, flex 2 0, titleStyle ] ] [ text "Entropy" ]
+            , namesPanel state
+            , configBtn
+            , instPanel
             ]
+        ]
+
+
+namesPanel : ConfigState -> Html Action
+namesPanel state =
+    div
+        [ class "config-top-panel"
+        , styleList [ flexStyle, aiStyle "center", jcStyle "space-around", bgColor "#d8d8d8", flex 3 0 ]
+        ]
+        [ div
+            [ class "player-config-panel"
+            , styleList [ flexStyle, centerStyle, columnStyle ]
+            ]
+            [ label
+                [ for "player1-name"
+                , style labelStyle
+                ]
+                [ text "Player 1:" ]
+            , input
+                [ type_ "text"
+                , name "player1-name"
+                , onInput SetPlayer1
+                , value state.player1name
+                ]
+                []
+            ]
+        , div
+            [ class "player-config-panel"
+            , styleList [ flexStyle, centerStyle, columnStyle ]
+            ]
+            [ label
+                [ for "player2-name"
+                , style labelStyle
+                ]
+                [ text "Player 2:" ]
+            , input
+                [ type_ "text"
+                , name "player2-name"
+                , onInput SetPlayer2
+                , value state.player2name
+                ]
+                []
+            ]
+        ]
+
+
+instPanel : Html Action
+instPanel =
+    div
+        [ class "config-instructions"
+        , styleList [ flexStyle, columnStyle, bgColor "#d8d8d8", flex 4 0 ]
+        ]
+        [ h3
+            [ class "config-instructions-link" ]
+            [ text "From "
+            , a
+                [ style anchorStyle
+                , href "https://boardgamegeek.com/boardgame/1329/hyle"
+                ]
+                [ text "BoardGameGeek" ]
+            ]
+        , instructions
         ]
 
 

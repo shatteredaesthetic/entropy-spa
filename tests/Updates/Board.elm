@@ -8,11 +8,11 @@ import Random exposing (initialSeed)
 import Dict
 import Matrix exposing (set)
 import Monocle.Lens exposing (modify)
-import Board.State exposing (..)
+import Game.Board.State exposing (..)
 import Util.State exposing (..)
 import Util.Types exposing (..)
 import Util.Lenses exposing (..)
-import Message.State as Message
+import Game.Message.State as Message
 import Util.Tiles exposing (randomTile)
 
 
@@ -174,21 +174,20 @@ mockInGameChaosMoveState : GameState
 mockInGameChaosMoveState =
     let
         m =
-            { board = set 0 1 (Cell (Just Red) False 0 1) <| makeBoard
+            { board = set 0 1 (Cell Red False 0 1) <| makeBoard
             , player1 = Player "1" Chaos 0
             , player2 = Player "2" Order 0
             , turn = Order
             , tiles = resetTiles <| initialSeed 5543
             , nextRound = True
             , message = Message.init
-            , initSeed = initialSeed 5543
             }
 
         newTiles =
             randomTile m.tiles
     in
         m
-            |> tilesL.set (TileState Nothing (Dict.fromList [ ( "red", 1 ) ]) newTiles.seed)
+            |> tilesL.set (TileState NoTile (Dict.fromList [ ( "red", 1 ) ]) newTiles.seed)
             |> InGame
 
 
@@ -204,8 +203,8 @@ mockInGameOrderFirstMoveState =
                     mockInGameEmptyState
     in
         state
-            |> modify boardL (Matrix.set 0 1 (Cell Nothing False 0 1) >> (highlightNeighbors 0 1))
-            |> tilesL.set (TileState (Just Red) (Dict.fromList [ ( "red", 1 ) ]) state.tiles.seed)
+            |> modify boardL (Matrix.set 0 1 (Cell NoTile False 0 1) >> (highlightNeighbors 0 1))
+            |> tilesL.set (TileState Red (Dict.fromList [ ( "red", 1 ) ]) state.tiles.seed)
             |> InGame
 
 
@@ -224,7 +223,6 @@ mockInGameOrderSecondMoveState =
             randomTile <| state.tiles
     in
         state
-            |> modify boardL (Matrix.set 0 0 (Cell (Just Red) False 0 0) >> removeHighlights)
+            |> modify boardL (Matrix.set 0 0 (Cell Red False 0 0) >> removeHighlights)
             |> tilesL.set newTiles
-            |> iSeedL.set newTiles.seed
             |> InGame

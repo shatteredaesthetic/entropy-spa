@@ -4,7 +4,7 @@ import Monocle.Lens as Lens exposing (Lens)
 import Monocle.Optional as Op exposing (Optional)
 import Random exposing (Seed)
 import Util.Types exposing (..)
-import Message.Types as Message
+import Game.Message.Types as Message
 
 
 p1L : Lens InGameState Player
@@ -77,7 +77,7 @@ tilesL =
     Lens .tiles <| \t s -> { s | tiles = t }
 
 
-currTileL : Lens TileState (Maybe Colour)
+currTileL : Lens TileState Colour
 currTileL =
     Lens .current <| \c t -> { t | current = c }
 
@@ -87,7 +87,7 @@ tileSeedL =
     Lens .seed <| \s t -> { t | seed = s }
 
 
-currL : Lens InGameState (Maybe Colour)
+currL : Lens InGameState Colour
 currL =
     Lens.compose tilesL currTileL
 
@@ -95,11 +95,6 @@ currL =
 seedL : Lens InGameState Seed
 seedL =
     Lens.compose tilesL tileSeedL
-
-
-iSeedL : Lens InGameState Seed
-iSeedL =
-    Lens .initSeed <| \s m -> { m | initSeed = s }
 
 
 boardL : Lens InGameState Board

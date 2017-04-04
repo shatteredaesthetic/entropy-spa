@@ -1,4 +1,4 @@
-module Message.Types exposing (..)
+module Game.Message.Types exposing (..)
 
 
 type alias Model =

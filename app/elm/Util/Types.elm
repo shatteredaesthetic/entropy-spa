@@ -3,7 +3,8 @@ module Util.Types exposing (..)
 import Matrix exposing (Matrix)
 import Random exposing (Seed)
 import Dict exposing (Dict)
-import Message.Types as Message
+import Game.Message.Types as Message
+import Ctrl.Types as Ctrl
 
 
 type GameState
@@ -27,7 +28,6 @@ type alias InGameState =
     , tiles : TileState
     , nextRound : Bool
     , message : Message.Model
-    , initSeed : Seed
     }
 
 
@@ -36,7 +36,7 @@ type alias Board =
 
 
 type alias Cell =
-    { colour : Maybe Colour
+    { colour : Colour
     , highlight : Bool
     , x : Int
     , y : Int
@@ -61,10 +61,11 @@ type Colour
     | Green
     | Blue
     | Violet
+    | NoTile
 
 
 type alias TileState =
-    { current : Maybe Colour
+    { current : Colour
     , ref : Dict String Int
     , seed : Seed
     }
@@ -77,10 +78,8 @@ type alias ScoreReturn =
 
 
 type Action
-    = StartGame
-    | NextRound
-    | NewGame
-    | Choose Int Int
+    = Choose Int Int
+    | Btn Ctrl.Msg
     | Msg Message.Msg
     | SetPlayer1 String
     | SetPlayer2 String

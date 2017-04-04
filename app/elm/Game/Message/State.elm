@@ -1,10 +1,10 @@
-module Message.State exposing (..)
+module Game.Message.State exposing (..)
 
 import Time exposing (second, millisecond)
 import Return as R exposing (Return)
 import Monocle.Lens as Lens exposing (Lens)
 import Util.State exposing (delay, ret)
-import Message.Types exposing (..)
+import Game.Message.Types exposing (..)
 
 
 init : Model

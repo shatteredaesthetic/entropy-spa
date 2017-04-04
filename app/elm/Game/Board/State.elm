@@ -1,4 +1,4 @@
-module Board.State exposing (..)
+module Game.Board.State exposing (..)
 
 import Matrix exposing (Matrix)
 import Return as R exposing (Return)
@@ -8,8 +8,9 @@ import Util.Types exposing (..)
 import Util.State exposing (..)
 import Util.Tiles exposing (randomTile)
 import Util.Lenses exposing (..)
-import Message.State as Message
-import Score exposing (score)
+import Game.Message.State as Message
+import Ctrl.State as Btn
+import Util.Score exposing (score)
 
 
 updateGame : Action -> InGameState -> Return Action GameState
@@ -28,6 +29,9 @@ updateGame action state =
                 |> R.singleton
                 |> (refractl msgL Msg <| Message.update msg)
 
+        Btn btnMsg ->
+            Btn.update btnMsg <| InGame state
+
         _ ->
             R.singleton <| InGame state
 
@@ -35,49 +39,52 @@ updateGame action state =
 updateOrder : Int -> Int -> InGameState -> Return Action GameState
 updateOrder x y state =
     case state.tiles.current of
-        Nothing ->
+        NoTile ->
             orderFirstMove x y state
 
-        Just tile ->
-            orderSecondMove x y tile state
+        _ ->
+            orderSecondMove x y state.tiles.current state
 
 
 orderFirstMove : Int -> Int -> InGameState -> Return Action GameState
 orderFirstMove x y state =
-    case getCellColour x y state.board of
-        Nothing ->
-            InGame state
-                |> ret (setMsg "Select a Tile first.")
+    let
+        colour_ =
+            getCellColour x y state.board
+    in
+        case colour_ of
+            NoTile ->
+                InGame state
+                    |> ret (setMsg "Select a Tile first.")
 
-        Just colour ->
-            state
-                |> modify boardL ((Matrix.update x y (\cell -> { cell | colour = Nothing })) >> (highlightNeighbors x y))
-                |> currL.set (Just colour)
-                |> InGame
-                |> ret (setMsg "Place tile in any Empty Cell.")
+            _ ->
+                state
+                    |> currL.set colour_
+                    |> modify boardL ((Matrix.update x y (\cell -> { cell | colour = NoTile })) >> (highlightNeighbors x y))
+                    |> InGame
+                    |> ret (setMsg "Place tile in any Empty Cell.")
 
 
 orderSecondMove : Int -> Int -> Colour -> InGameState -> Return Action GameState
 orderSecondMove x y tile state =
     case getCellColour x y state.board of
-        Just _ ->
-            InGame state
-                |> ret (setMsg "Place Tile in any Empty Cell.")
-
-        Nothing ->
+        NoTile ->
             let
                 newTiles =
                     randomTile state.tiles
             in
                 if validateOrder x y state.board then
                     { state | turn = Chaos }
-                        |> modify boardL (Matrix.set x y (Cell (Just tile) False x y) >> removeHighlights)
-                        |> iSeedL.set newTiles.seed
+                        |> modify boardL (Matrix.set x y (Cell tile False x y) >> removeHighlights)
                         |> tilesL.set newTiles
                         |> InGame
                         |> ret (setMsg "Place new Tile in any Empty Cell.")
                 else
                     R.return (InGame state) (setMsg "You can't put a Tile on another Tile.")
+
+        _ ->
+            InGame state
+                |> ret (setMsg "Place Tile in any Empty Cell.")
 
 
 updateChaos : Int -> Int -> InGameState -> Return Action GameState
@@ -90,7 +97,7 @@ updateChaos x y state =
             True ->
                 state
                     |> boardL.set newBoard
-                    |> currL.set Nothing
+                    |> currL.set NoTile
                     |> (if state.nextRound then
                             makeBreak <| score newBoard
                         else
@@ -101,7 +108,7 @@ updateChaos x y state =
                 if validateChaos x y state.board then
                     { state | turn = Order }
                         |> boardL.set newBoard
-                        |> currL.set Nothing
+                        |> currL.set NoTile
                         |> InGame
                         |> ret (setMsg "Select any Tile on Board.")
                 else
@@ -120,6 +127,6 @@ makeBreak pts state =
                 |> R.singleton
     in
         if state.nextRound then
-            f ( p1ScoreL, p1RoleL ) p2RoleL
-        else
             f ( p2ScoreL, p2RoleL ) p1RoleL
+        else
+            f ( p1ScoreL, p1RoleL ) p2RoleL

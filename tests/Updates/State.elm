@@ -5,18 +5,15 @@ import Expect
 import TestUtil exposing (..)
 import Random exposing (initialSeed)
 import Return as R exposing (Return)
-import State exposing (..)
+import Config.State exposing (..)
 import Util.Types exposing (..)
-import Board.State exposing (updateChaos)
+import Ctrl.Types exposing (..)
 
 
 allStateUpdateTests : Test
 allStateUpdateTests =
     describe "State update functions (minus InGame)"
-        [ updateConfigTests
-        , updateBreakTests
-        , updateStateTests
-        ]
+        [ updateConfigTests ]
 
 
 updateConfigTests : Test
@@ -34,50 +31,7 @@ updateConfigTests =
             \() ->
                 Expect.equal mockStartState <|
                     Tuple.first <|
-                        updateConfig StartGame mockFullConfig
-        ]
-
-
-updateBreakTests : Test
-updateBreakTests =
-    let
-        break =
-            updateChaos 0 1 mockInGameOneMoveState
-                |> Tuple.first
-
-        newState =
-            case break of
-                OutGame st ->
-                    st
-
-                _ ->
-                    mockInGameEmptyState
-    in
-        describe "Tests for updateBreak"
-            [ test "NewGame sets up an empty Config" <|
-                \() ->
-                    Expect.equal (R.singleton <| Config mockEmptyConfig) <|
-                        updateBreak NewGame mockInGameEmptyState
-              {- }, test "NextRound renders into a new round with player's score" <|
-                 \() ->
-                     Expect.equal mockNewRoundState <|
-                         Tuple.first <|
-                             updateBreak NextRound newState
-              -}
-            ]
-
-
-updateStateTests : Test
-updateStateTests =
-    describe "Tests for updateState"
-        [ test "NewGame from updateBreak" <|
-            \() ->
-                Expect.equal (R.singleton <| Config mockEmptyConfig) <|
-                    updateState NewGame (OutGame mockInGameEmptyState)
-        , test "SetPlayer1 from updateConfig" <|
-            \() ->
-                Expect.equal mockConfigP1 <|
-                    updateState (SetPlayer1 "1") (Config mockEmptyConfig)
+                        updateConfig (Btn StartGame) mockFullConfig
         ]
 
 

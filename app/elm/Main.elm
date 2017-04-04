@@ -1,13 +1,17 @@
 module Main exposing (..)
 
-import Html exposing (Html)
+import Html exposing (Html, div)
+import Html.Attributes exposing (class)
 import Random exposing (initialSeed)
 import Return as R exposing (Return)
-import Util.Types exposing (..)
-import State exposing (updateState)
-import Board.View exposing (gameView)
-import Config.View exposing (configUI)
 import Break.View exposing (breakUI)
+import Config.State exposing (updateConfig)
+import Config.View exposing (configUI)
+import Ctrl.State as Btn
+import Game.Board.State exposing (updateGame)
+import Game.View exposing (gameUI)
+import Util.Types exposing (..)
+import Util.View exposing (styleList, outerContainer, flexStyle, (=>))
 
 
 type alias Flags =
@@ -24,20 +28,41 @@ init { randSeed } =
 
 view : GameState -> Html Action
 view gameState =
-    case gameState of
+    let
+        content =
+            case gameState of
+                Config cfg ->
+                    configUI cfg
+
+                InGame inGameState ->
+                    gameUI inGameState
+
+                OutGame inGameState ->
+                    breakUI inGameState
+    in
+        div
+            [ class "container"
+            , styleList [ flexStyle, outerContainer, [ "border" => "1px solid red" ] ]
+            ]
+            [ content ]
+
+
+update : Action -> GameState -> Return Action GameState
+update action state =
+    case state of
         Config cfg ->
-            configUI cfg
+            updateConfig action cfg
 
-        InGame inGameState ->
-            gameView inGameState
+        InGame s ->
+            updateGame action s
 
-        OutGame inGameState ->
-            breakUI inGameState
+        OutGame s ->
+            case action of
+                Btn btnMsg ->
+                    Btn.update btnMsg state
 
-
-update : Action -> GameState -> ( GameState, Cmd Action )
-update action gameState =
-    updateState action gameState
+                _ ->
+                    R.singleton state
 
 
 main : Program Flags GameState Action

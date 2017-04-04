@@ -24,7 +24,7 @@ randomTile tile =
         case Dict.get newKey tile.ref of
             Nothing ->
                 { tile | ref = Dict.insert newKey 1 tile.ref }
-                    |> currTileL.set (Just newTile)
+                    |> currTileL.set newTile
                     |> tileSeedL.set newSeed
 
             Just val ->
@@ -40,7 +40,7 @@ randomTile tile =
                                 )
                                 tile.ref
                     }
-                        |> currTileL.set (Just newTile)
+                        |> currTileL.set newTile
                         |> tileSeedL.set newSeed
                 else
                     randomTile { tile | seed = newSeed }
@@ -65,4 +65,4 @@ intToTile size colorIdx =
             Violet
 
         _ ->
-            Red
+            NoTile
