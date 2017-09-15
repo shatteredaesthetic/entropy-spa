@@ -2,108 +2,44 @@ module Game.Player.View exposing (..)
 
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (style, class)
+import Game.Board.View exposing (cellBtnCont, cellOuterCont)
 import Util.Types exposing (..)
-import Util.View exposing (..)
-import Game.Player.Styles exposing (..)
+import Util.View exposing ((=>), getHexColor)
+import Ctrl.View exposing (gameBtns)
+import Styled exposing (..)
 
 
-player1Header : InGameState -> Html Action
-player1Header state =
-    div
-        [ class "p1-container"
-        , styleList [ flexStyle, columnStyle, flex 1 0 ]
-        ]
-        [ div
-            [ class "player-top-container"
-            , styleList [ flexStyle, columnStyle, aiStyle "flex-start", flex 3 0 ]
+p1Header : InGameState -> Html Action
+p1Header { player1, tiles } =
+    plyrCont
+        [ class "p1-container" ]
+        [ plyrTopCont []
+            [ tokenCont [] [ playerToken player1 ]
+            , nameCont [] [ text player1.name ]
+            , scoreCont [] [ text <| toString player1.score ]
             ]
-            [ div
-                [ class "player-token"
-                , styleList [ flexStyle, aiStyle "flex-end" ]
-                ]
-                [ playerToken state.player1 ]
-            , div
-                [ class "name-container" ]
-                [ div
-                    [ class "player-name"
-                    , styleList [ aiStyle "center", txtCol "#fafafa" ]
-                    ]
-                    [ text state.player1.name ]
-                ]
-            , div
-                [ class "score-container" ]
-                [ div
-                    [ class "player-score"
-                    , styleList [ flexStyle, centerStyle, txtCol "#fafafa" ]
-                    ]
-                    [ text <| toString state.player1.score ]
-                ]
-            ]
-        , div
-            [ class "player-bottom-container"
-            , styleList [ flexStyle, aiStyle "flex-end", flex 1 0 ]
-            ]
-            [ div
-                [ class "selected-tile"
-                , styleList [ flexStyle, centerStyle ]
-                ]
-                [ div
-                    [ style <| currentTileStyle state ]
-                    []
-                ]
-            ]
+        , plyrBottomCont []
+            [ centered [] [ selectedCellView tiles.current ] ]
         ]
 
 
-player2Header : InGameState -> Html Action
-player2Header state =
-    div
-        [ class "p2-container"
-        , styleList [ flexStyle, columnStyle, flex 1 0 ]
+p2Header : InGameState -> Html Action
+p2Header { player2 } =
+    plyrCont
+        [ class "p2-container" ]
+        [ plyrTopCont []
+            [ tokenCont [] [ playerToken player2 ]
+            , nameCont [] [ text player2.name ]
+            , scoreCont [] [ text <| toString player2.score ]
+            ]
+        , plyrBottomCont []
+            [ gameBtns ]
         ]
-        [ div
-            [ class "player-top-container"
-            , styleList [ flexStyle, columnStyle, aiStyle "flex-start", flex 3 0 ]
-            ]
-            [ div
-                [ class "player-token"
-                , styleList [ flexStyle, aiStyle "flex-start" ]
-                ]
-                [ playerToken state.player2 ]
-            , div
-                [ class "name-container" ]
-                [ div
-                    [ class "player-name"
-                    , styleList [ aiStyle "flex-end", txtCol "#fafafa" ]
-                    ]
-                    [ text state.player2.name ]
-                ]
-            , div
-                [ class "score-container"
-                , styleList [ flexStyle ]
-                ]
-                [ div
-                    [ class "player-score"
-                    , styleList [ flexStyle, centerStyle, txtCol "#fafafa" ]
-                    ]
-                    [ text <| toString state.player2.score ]
-                ]
-            ]
-        , div
-            [ class "player-bottom-container"
-            , styleList [ flexStyle, aiStyle "flex-end", flex 1 0 ]
-            ]
-            [ div
-                [ class "btn-container" ]
-                [ div
-                    [ class "restart-btn" ]
-                    [ text "Restart" ]
-                , div
-                    [ class "reset-btn" ]
-                    [ text "Reset" ]
-                ]
-            ]
-        ]
+
+
+selectedCellView : Colour -> Html Action
+selectedCellView colour =
+    cellOuterCont False [] [ cellBtnCont colour [] [] ]
 
 
 playerToken : Player -> Html Action
@@ -117,18 +53,124 @@ playerToken player =
                 Order ->
                     "O"
     in
-        div
-            [ class "token-container"
-            , styleList [ flexStyle, centerStyle ]
-            ]
-            [ div
-                [ class "token-inner-container"
-                , styleList [ flexStyle, centerStyle, innerStyle ]
-                ]
-                [ div
-                    [ class "player-token"
-                    , styleList [ tokenStyle, flex 1 0 ]
-                    ]
-                    [ text token ]
-                ]
-            ]
+        centered [] [ outerCont [] [ tokenUI [] [ text token ] ] ]
+
+
+plyrTopCont : StyledComponent
+plyrTopCont =
+    styled div
+        [ display flex_
+        , flex (int 5) (int 0) auto
+        , flexDirection column
+        , alignContent flexStart
+        , alignItems stretch
+        , border (px 2) solid (hex "00aa00")
+        ]
+
+
+tokenCont : StyledComponent
+tokenCont =
+    styled div
+        [ display flex_
+        , flex (int 3) (int 0) (percent 40)
+        , justifyContent center
+        , alignItems center
+        , border (px 2) solid (hex "aa0000")
+        , backgroundColor (hex "1e0812")
+        ]
+
+
+nameCont : StyledComponent
+nameCont =
+    styled div
+        [ display flex_
+        , flex (int 2) (int 0) (percent 30)
+        , justifyContent center
+        , alignItems center
+        , color (hex "1e0812")
+        , fontSize (em 5)
+        , backgroundColor (hex "d8d8d8")
+        , textShadow zero zero (px 15) (hex "727272")
+        ]
+
+
+scoreCont : StyledComponent
+scoreCont =
+    styled div
+        [ display flex_
+        , flex (int 1) (int 0) (percent 30)
+        , justifyContent center
+        , alignItems center
+        , color (hex "fafafa")
+        , backgroundColor (hex "1e0812")
+        , textShadow zero zero (px 20) (hex "b61e64")
+        , fontSize (em 7)
+        , border (px 2) solid (hex "0000aa")
+        ]
+
+
+plyrCont : StyledComponent
+plyrCont =
+    styled div
+        [ display flex_
+        , flexDirection column
+        , flex (int 1) (int 0) auto
+        , backgroundColor (hex "d8d8d8")
+        ]
+
+
+currTile : Colour -> StyledComponent
+currTile curr =
+    styled div
+        [ width (percent 80)
+        , height (percent 80)
+        , backgroundColor <| hex <| getHexColor curr
+        ]
+
+
+centered : StyledComponent
+centered =
+    styled div
+        [ display flex_
+        , justifyContent center
+        , alignContent center
+        , width (percent 50)
+        , height (percent 50)
+        ]
+
+
+plyrBottomCont : StyledComponent
+plyrBottomCont =
+    styled div
+        [ display flex_
+        , flex (int 2) (int 0) auto
+        , alignContent flexEnd
+        , justifyContent center
+        , alignItems center
+        , backgroundColor (hex "727272")
+        ]
+
+
+tokenUI : StyledComponent
+tokenUI =
+    styled div
+        [ display flex_
+        , flex (int 1) (int 0) auto
+        , color (hex "b61e64")
+        , padding (px 5)
+        , fontSize (em 9)
+        , fontWeight (int 700)
+        , boxSizing borderBox
+        , border (px 5) solid (hex "1e0812")
+        , backgroundColor (hex "1e0812")
+        , textShadow zero zero (px 10) (hex "fafafa")
+        ]
+
+
+outerCont : StyledComponent
+outerCont =
+    styled div
+        [ display flex_
+        , justifyContent center
+        , alignContent center
+        ]

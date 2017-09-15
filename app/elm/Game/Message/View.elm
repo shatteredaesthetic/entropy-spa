@@ -3,40 +3,39 @@ module Game.Message.View exposing (..)
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (class)
 import Game.Message.Types exposing (..)
-import Util.View exposing (..)
 import Util.Types exposing (..)
+import Styled exposing (..)
 
 
 view : Model -> Html Action
 view model =
-    let
-        content =
-            case model.message of
-                Empty ->
-                    ""
-
-                Adding m ->
-                    m.show
-
-                Removing m ->
-                    m.show
-
-        style_ =
-            styleList [ flexStyle, centerStyle, footerStyle, bgColor "#1e0812", flex 1 0 ]
-    in
-        div
-            [ class "game-footer"
-            , style_
-            ]
-            [ div
-                [ class "game-footer-inner" ]
-                [ text <| ">  " ++ content ]
-            ]
+    msgCont
+        [ class "game-footer" ]
+        [ text <| ">  " ++ showContent model.message ]
 
 
-footerStyle : List Attr
-footerStyle =
-    [ "color" => "#fafafa"
-    , "font-family" => "Monospace"
-    , "box-shadow" => "inset 0px 3px 3px 0px #d8d8d8"
-    ]
+msgCont : StyledComponent
+msgCont =
+    styled div
+        [ display flex_
+        , flex (int 1) (int 0) auto
+        , justifyContent flexStart
+        , alignContent center
+        , backgroundColor (hex "1e0812")
+        , color (hex "fafafa")
+        , fontFamily monospace
+        , boxShadow (px 0) (px 2) (px 2) (px 0) (hex "d8d8d8")
+        ]
+
+
+showContent : Message -> String
+showContent msg =
+    case msg of
+        Empty ->
+            ""
+
+        Adding m ->
+            m.show
+
+        Removing m ->
+            m.show

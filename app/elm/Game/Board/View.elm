@@ -1,14 +1,14 @@
-module Game.Board.View exposing (view)
+module Game.Board.View exposing (view, cellOuterCont, cellBtnCont)
 
 import Html exposing (..)
-import Html.Attributes exposing (class, style)
 import Html.Events exposing (onClick)
 import Array
 import Maybe
 import Matrix exposing (Matrix)
 import Util.Types exposing (..)
-import Util.View exposing (..)
-import Game.Board.Styles exposing (..)
+import Util.View exposing (getHexColor)
+import Styled exposing (..)
+import Styled.Types exposing (Rule)
 
 
 view : Matrix Cell -> Html Action
@@ -20,39 +20,16 @@ view board =
         boardView =
             List.range 0 4
                 |> List.map (makeBoardRow newBoard)
-                |> div
-                    [ class "game-board-container"
-                    , styleList [ flexStyle, boardContainerStyle ]
-                    ]
-
-        contStyle =
-            [ "padding" => "5px 0px 5 px 0px" ]
+                |> boardCont []
     in
-        div
-            [ styleList [ flexStyle, centerStyle, flex 4 0, bgColor "#1e0812" ] ]
-            [ boardView ]
+        boardViewCont [] [ boardView ]
 
 
 cellView : Cell -> Html Action
 cellView cell =
-    let
-        bgStyle =
-            bgColor <| getHexColor cell.colour
-
-        outerStyle =
-            styleList [ flexStyle, centerStyle, rel, tileStyle, highlightStyle cell, flex 1 0 ]
-    in
-        div
-            [ class "board-cell"
-            , outerStyle
-            , onClick (Choose cell.x cell.y)
-            ]
-            [ div
-                [ class "cell-btn"
-                , styleList [ cellBtnStyle, bgStyle ]
-                ]
-                []
-            ]
+    cellOuterCont cell.highlight
+        [ onClick (Choose cell.x cell.y) ]
+        [ cellBtnCont cell.colour [] [] ]
 
 
 makeBoardRow : Matrix (Html Action) -> Int -> Html Action
@@ -60,7 +37,70 @@ makeBoardRow board y =
     Matrix.getRow y board
         |> Maybe.map Array.toList
         |> Maybe.withDefault []
-        |> div
-            [ class "board-row"
-            , styleList [ flexStyle, columnStyle, flex 1 0 ]
+        |> rowCont []
+
+
+boardCont : StyledComponent
+boardCont =
+    styled div
+        [ display flex_
+        , width (vh 70)
+        , height (vh 70)
+        ]
+
+
+boardViewCont : StyledComponent
+boardViewCont =
+    styled div
+        [ display flex_
+        , justifyContent center
+        , alignContent center
+        , flex (int 4) (int 0) auto
+        , backgroundColor (hex "1e0812")
+        ]
+
+
+cellBtnCont : Colour -> StyledComponent
+cellBtnCont col =
+    styled div
+        [ width (percent 90)
+        , height (percent 90)
+        , boxSizing borderBox
+        , borderRadius (px 5)
+        , backgroundColor (hex <| getHexColor col)
+        ]
+
+
+cellOuterCont : Bool -> StyledComponent
+cellOuterCont hghlgt =
+    styled div <|
+        List.concat
+            [ [ display flex_
+              , justifyContent center
+              , alignItems center
+              , flex (int 1) (int 0) auto
+              , borderRadius (px 4)
+              , backgroundColor (hex "1e0812")
+              , border (px 1) solid (hex "8d8d8d")
+              ]
+            , highlightStyle hghlgt
             ]
+
+
+rowCont : StyledComponent
+rowCont =
+    styled div
+        [ display flex_
+        , flexDirection column
+        , flex (int 1) (int 0) auto
+        ]
+
+
+highlightStyle : Bool -> List Rule
+highlightStyle hghlgt =
+    case hghlgt of
+        True ->
+            [ backgroundColor (hex "f4fc14") ]
+
+        False ->
+            []

@@ -1,79 +1,92 @@
 module Ctrl.View exposing (..)
 
 import Html exposing (Html, div, text)
-import Html.Attributes exposing (style, class)
 import Html.Events exposing (onClick)
-import Util.View exposing (..)
 import Ctrl.Types exposing (..)
 import Util.Types exposing (..)
+import Styled exposing (..)
+import Styled.Cursors exposing (pointer)
 
 
 gameBtns : Html Action
 gameBtns =
-    div
-        [ class "btn-container game-btns"
-        , styleList [ flexStyle, centerStyle, columnStyle, stretchStyle ]
-        ]
-        [ restartBtn
-        , resetBtn
-        ]
+    gameBtnsCont [] [ restartBtn, resetBtn ]
 
 
 breakBtns : Html Action
 breakBtns =
-    div
-        [ class "btn-container break-btns"
-        , styleList [ flexStyle, stretchStyle, jcStyle "space-around", aiStyle "center" ]
-        ]
-        [ resetBtn
-        , roundBtn
-        ]
+    breakBtnsCont [] [ resetBtn, roundBtn ]
 
 
-configBtn : Html Action
-configBtn =
-    div
-        [ class "btn-container cfg-btns"
-        , styleList [ flexStyle, centerStyle, bgColor "#d8d8d8", flex 1 0 ]
-        ]
-        [ startBtn ]
-
-
-resetBtn : Html Action
-resetBtn =
-    div
-        [ class "reset-btn"
-        , styleList [ flexStyle, centerStyle, btnStyle ]
-        , onClick (Btn Reset)
-        ]
-        [ text "Reset" ]
-
-
-restartBtn : Html Action
-restartBtn =
-    div
-        [ class "restart-btn"
-        , styleList [ flexStyle, centerStyle, btnStyle ]
-        , onClick (Btn Restart)
-        ]
-        [ text "Restart" ]
-
-
-roundBtn : Html Action
-roundBtn =
-    div
-        [ class "next-round-btn"
-        , styleList [ flexStyle, centerStyle, btnStyle ]
-        , onClick (Btn NextRound)
-        ]
-        [ text "Next Round" ]
+cfgBtns : Html Action
+cfgBtns =
+    cfgBtnsCont [] [ startBtn ]
 
 
 startBtn : Html Action
 startBtn =
-    div
-        [ class "start-game-btn"
-        , styleList [ flexStyle, centerStyle, btnStyle, styledBtnStyle ]
-        , onClick (Btn StartGame)
+    btnCont [ onClick (Btn StartGame) ] [ text "Start Game" ]
+
+
+roundBtn : Html Action
+roundBtn =
+    btnCont [ onClick (Btn NextRound) ] [ text "Next Round" ]
+
+
+restartBtn : Html Action
+restartBtn =
+    btnCont [ onClick (Btn Restart) ] [ text "Restart" ]
+
+
+resetBtn : Html Action
+resetBtn =
+    btnCont [ onClick (Btn Reset) ] [ text "Reset" ]
+
+
+gameBtnsCont : StyledComponent
+gameBtnsCont =
+    styled div
+        [ display flex_
+        , justifyContent spaceAround
+        , alignContent center
+        , flexDirection column
+        , width (percent 50)
+        , height (percent 50)
         ]
-        [ text "Start Game" ]
+
+
+breakBtnsCont : StyledComponent
+breakBtnsCont =
+    styled div
+        [ display flex_
+        , width (percent 100)
+        , height (percent 100)
+        , justifyContent spaceAround
+        , alignItems center
+        ]
+
+
+cfgBtnsCont : StyledComponent
+cfgBtnsCont =
+    styled div
+        [ display flex_
+        , justifyContent center
+        , alignItems center
+        , backgroundColor (hex "d8d8d8")
+        , flex (int 1) (int 0) auto
+        ]
+
+
+btnCont : StyledComponent
+btnCont =
+    styled div
+        [ display flex_
+        , justifyContent center
+        , alignContent center
+        , cursor pointer
+        , backgroundColor (hex "b61e64")
+        , color (hex "fafafa")
+        , borderRadius (px 5)
+        , padding (px 10)
+        , border (px 1) solid (hex "1e0812")
+        ]

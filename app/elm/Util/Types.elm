@@ -5,6 +5,7 @@ import Random exposing (Seed)
 import Dict exposing (Dict)
 import Game.Message.Types as Message
 import Ctrl.Types as Ctrl
+import VirtualDom exposing (Property, Node)
 
 
 type GameState
@@ -83,3 +84,7 @@ type Action
     | Msg Message.Msg
     | SetPlayer1 String
     | SetPlayer2 String
+
+
+type alias StyledComponent =
+    List (Property Action) -> List (Node Action) -> Node Action
