@@ -3,6 +3,7 @@ module Util.Lenses exposing (..)
 import Monocle.Lens as Lens exposing (Lens)
 import Monocle.Optional as Op exposing (Optional)
 import Random exposing (Seed)
+import Dict exposing (Dict)
 import Util.Types exposing (..)
 import Game.Message.Types as Message
 
@@ -85,6 +86,11 @@ currTileL =
 tileSeedL : Lens TileState Seed
 tileSeedL =
     Lens .seed <| \s t -> { t | seed = s }
+
+
+tileRefL : Lens TileState (Dict String Int)
+tileRefL =
+    Lens .ref <| \r t -> { t | ref = r }
 
 
 currL : Lens InGameState Colour

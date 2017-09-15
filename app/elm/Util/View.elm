@@ -1,5 +1,6 @@
 module Util.View exposing (..)
 
+import Css exposing (..)
 import Html exposing (Html, Attribute, div)
 import Html.Attributes exposing (style)
 import Util.Types exposing (..)
@@ -31,9 +32,9 @@ type alias Attr =
     ( String, String )
 
 
-hiddenStyle : List ( String, String )
+hiddenStyle : Mixin
 hiddenStyle =
-    [ "display" => "hidden" ]
+    mixin [ display none ]
 
 
 tileToString : Colour -> String
@@ -62,99 +63,79 @@ getHexColor : Colour -> String
 getHexColor colour =
     case colour of
         Red ->
-            "#f21f1f"
+            "f21f1f"
 
         Orange ->
-            "#f78818"
+            "f78818"
 
         Green ->
-            "#5fd813"
+            "5fd813"
 
         Blue ->
-            "#1953e5"
+            "1953e5"
 
         Violet ->
-            "#da1ee8"
+            "da1ee8"
 
         NoTile ->
-            "#1e0812"
+            "1e0812"
 
 
-flex : Int -> Int -> List Attr
+flex : Int -> Int -> Mixin
 flex x y =
-    [ "flex" => ((toString x) ++ " " ++ (toString y) ++ " auto") ]
+    mixin [ flex2 (int x) (int y) ]
 
 
-flexStyle : List Attr
-flexStyle =
-    [ "display" => "flex" ]
-
-
-centerStyle : List Attr
+centerStyle : Mixin
 centerStyle =
-    List.concat [ jcStyle "center", aiStyle "center" ]
+    mixin [ justifyContent center, alignItems center ]
 
 
-btnStyle : List Attr
+btnStyle : Mixin
 btnStyle =
-    [ "cursor" => "pointer" ]
+    mixin
+        [ cursor pointer
+        , displayFlex
+        , centerStyle
+        ]
 
 
-bgColor : String -> List Attr
+bgColor : String -> Mixin
 bgColor str =
-    [ "background" => str ]
+    mixin [ backgroundColor <| hex str ]
 
 
-columnStyle : List Attr
+columnStyle : Mixin
 columnStyle =
-    [ "flex-direction" => "column" ]
+    mixin [ flexDirection column ]
 
 
-stretchStyle : List Attr
+stretchStyle : Mixin
 stretchStyle =
-    List.concat [ wd "100%", ht "100%" ]
+    mixin [ width (pct 1.0), height (pct 1.0) ]
 
 
-jcStyle : String -> List Attr
-jcStyle str =
-    [ "justify-content" => str ]
-
-
-aiStyle : String -> List Attr
-aiStyle str =
-    [ "align-items" => str ]
-
-
-styledBtnStyle : List Attr
+styledBtnStyle : Mixin
 styledBtnStyle =
-    [ "box-sizing" => "border-box"
-    , "padding" => "5px"
-    , "background" => "#b61e64"
-    , "color" => "white"
-    , "border-radius" => "5px"
-    ]
+    mixin
+        [ boxSizing borderBox
+        , color <| hex "fafafa"
+        , padding (px 5)
+        , backgroundColor <| hex "b61e64"
+        , borderRadius (px 5)
+        ]
 
 
-ht : String -> List Attr
-ht h =
-    [ "height" => h ]
-
-
-wd : String -> List Attr
-wd w =
-    [ "width" => w ]
-
-
-rel : List Attr
+rel : Mixin
 rel =
-    [ "position" => "relative" ]
+    mixin [ position relative ]
 
 
-outerContainer : List Attr
+outerContainer : Mixin
 outerContainer =
-    List.concat [ wd "100vw", ht "100vh", bgColor "#1e0812" ]
+    mixin [ width (vw 100), height (vh 100), bgColor "1e0812" ]
 
 
-txtCol : String -> List Attr
+txtCol : String -> Mixin
 txtCol str =
-    [ "color" => str ]
+    mixin [ color <| hex str ]

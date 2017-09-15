@@ -16,6 +16,11 @@ module.exports = {
         mainModules: ["app/elm/Main.elm"],
         outputFolder: "public/js/"
       },
+      elmCss: {
+        sourcePath: "app/elm/Stylesheets.elm",
+        outputDir: "public/css/",
+        pattern: /Styles.elm/
+      },
       sass: {
         mode: "native"
       }

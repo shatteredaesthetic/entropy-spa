@@ -98,11 +98,7 @@ updateChaos x y state =
                 state
                     |> boardL.set newBoard
                     |> currL.set NoTile
-                    |> (if state.nextRound then
-                            makeBreak <| score newBoard
-                        else
-                            makeBreak <| score newBoard
-                       )
+                    |> (makeBreak <| score newBoard)
 
             False ->
                 if validateChaos x y state.board then

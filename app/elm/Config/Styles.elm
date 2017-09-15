@@ -1,38 +1,44 @@
 module Config.Styles exposing (..)
 
+import Css exposing (..)
+import Css.Namespace exposing (namespace)
+import Html.CssHelpers exposing (Namespace, withNamespace)
+import Util.Types exposing (..)
 import Util.View exposing (..)
 
 
-infoStyle : List Attr
-infoStyle =
-    List.concat [ bgColor "#1e0812", txtCol "#d8d8d8" ]
+css : Stylesheet
+css =
+    (stylesheet << namespace configNS.name)
+        [ id OuterContainer
+            [ displayFlex, centerStyle, stretchStyle ]
+        , id InnerContainer
+            [ displayFlex, columnStyle, height (pct 100), width (pct 70), justifyContent spaceAround, alignItems stretch ]
+        , id GameTitle
+            [ displayFlex, centerStyle, flex2 (int 2) (int 0), txt, bgColor "d8d8d8", boldF, fontSize (em 3) ]
+        , id InstructionPanel
+            [ displayFlex, columnStyle, bgColor "d8d8d8", txtCol "1e0812", flex2 (int 4) (int 0) ]
+        , id InstructionAnchor
+            [ txt, textDecoration none ]
+        , id TopPanel
+            [ displayFlex, alignItems center, justifyContent spaceAround, bgColor "d8d8d8", flex2 (int 3) (int 0) ]
+        , class PlyrConfigPanel
+            [ displayFlex, centerStyle, columnStyle ]
+        , class PlyrConfigLabel
+            [ txt, boldF ]
+        ]
 
 
-anchorStyle : List Attr
-anchorStyle =
-    List.concat [ txt, [ "text-decoration" => "none" ] ]
+configNS : Namespace String class id msg
+configNS =
+    withNamespace "config"
 
 
-titleStyle : List Attr
-titleStyle =
-    List.concat [ txt, bgColor "#d8d8d8", boldF, [ "font-size" => "3em" ] ]
-
-
-labelStyle : List Attr
-labelStyle =
-    List.concat [ txt, boldF ]
-
-
-centerBtnStyle : List Attr
-centerBtnStyle =
-    List.concat [ txt, aiStyle "space-around" ]
-
-
-boldF : List Attr
+boldF : Mixin
 boldF =
-    [ "font-weight" => "bold" ]
+    fontWeight bold
 
 
-txt : List Attr
+txt : Mixin
 txt =
-    txtCol "#b61e64"
+    txtCol "b61e64"

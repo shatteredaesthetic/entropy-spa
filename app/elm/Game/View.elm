@@ -12,9 +12,7 @@ import Game.Board.View as Board
 gameUI : InGameState -> Html Action
 gameUI state =
     div
-        [ id "game-container"
-        , styleList [ flexStyle, stretchStyle ]
-        ]
+        [ id GameContainer ]
         [ player1Header state
         , gameView state
         , player2Header state
@@ -24,9 +22,7 @@ gameUI state =
 gameView : InGameState -> Html Action
 gameView state =
     div
-        [ id "game-middle-panel"
-        , styleList [ flexStyle, columnStyle, jcStyle "space-around", flex 3 0 ]
-        ]
+        [ id GamePanel ]
         [ Board.view state.board
         , Message.view state.message
         ]

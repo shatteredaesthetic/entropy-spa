@@ -55,15 +55,15 @@ score board =
         cols =
             convertBoard Matrix.getColumn >> f
     in
-        bigPhi (+) rows cols board
+        phoenix (+) rows cols board
 
 
-{-| bigPhi - Applies a function to the result of applying two different functions on the same input.
-    >>> bigPhi (+) ((*) 3) ((*) 2) 5
+{-| phoenix - Applies a function to the result of applying two different functions on the same input.
+    >>> phoenix (+) ((*) 3) ((*) 2) 5
     25
-    >>> bigPhi String.append String.toLower String.toUpper "test"
+    >>> phoenix String.append String.toLower String.toUpper "test"
     "testTEST"
 -}
-bigPhi : (b -> c -> d) -> (a -> b) -> (a -> c) -> a -> d
-bigPhi f g h x =
+phoenix : (b -> c -> d) -> (a -> b) -> (a -> c) -> a -> d
+phoenix f g h x =
     f (g x) (h x)

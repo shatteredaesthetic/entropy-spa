@@ -63,11 +63,7 @@ makeBoard =
             Matrix.repeat 5 5 NoTile
 
         f x y el =
-            { x = x
-            , y = y
-            , highlight = False
-            , colour = el
-            }
+            Cell el False x y
     in
         Matrix.indexedMap f m
 
@@ -175,4 +171,4 @@ boardEmpty board =
         |> Matrix.map .colour
         |> .data
         |> Array.toList
-        |> List.all (\c -> c == NoTile)
+        |> List.all (\c -> c /= NoTile)

@@ -1,54 +1,47 @@
 module Game.Player.View exposing (..)
 
 import Html exposing (Html, div, text)
-import Html.Attributes exposing (style, id, class)
+import Html.Attributes exposing (style)
 import Util.Types exposing (..)
 import Util.View exposing (..)
 import Game.Player.Styles exposing (..)
+import Ctrl.View exposing (gameBtns)
+
+
+{ id, class, className } =
+    playerNS
 
 
 player1Header : InGameState -> Html Action
 player1Header state =
     div
-        [ id "p1-container"
-        , styleList [ flexStyle, columnStyle, bgColor "#d8d8d8", flex 1 0 ]
+        [ id P1Container
+        , styleList
         ]
         [ div
-            [ class "top-container"
-            , styleList [ flexStyle, columnStyle, aiStyle "flex-start", flex 3 0 ]
-            ]
+            [ class TopContainer ]
             [ div
-                [ id "player1-token"
-                , styleList [ flexStyle, aiStyle "flex-end" ]
-                ]
+                [ id P1Token ]
                 [ playerToken state.player1 ]
             , div
-                [ class "name-container" ]
+                [ class NameContainer ]
                 [ div
-                    [ class "player-name"
-                    , styleList [ aiStyle "center", txtCol "#fafafa" ]
-                    ]
+                    [ class PlayerName ]
                     [ text state.player1.name ]
                 ]
             , div
-                [ class "score-container" ]
+                [ class ScoreContainer ]
                 [ div
-                    [ class "player-score"
-                    , styleList [ flexStyle, centerStyle, txtCol "#fafafa" ]
-                    ]
+                    [ class PlayerScore ]
                     [ text <| toString state.player1.score ]
                 ]
             ]
         , div
-            [ class "player-bottom-container"
-            , styleList [ flexStyle, aiStyle "flex-end", flex 1 0 ]
-            ]
+            [ class BottomContainer ]
             [ div
-                [ class "selected-tile"
-                , styleList [ flexStyle, centerStyle ]
-                ]
+                [ id SelectedTile ]
                 [ div
-                    [ style <| currentTileStyle state ]
+                    [ style <| currentTileStyle state.tiles.current ]
                     []
                 ]
             ]
@@ -58,51 +51,30 @@ player1Header state =
 player2Header : InGameState -> Html Action
 player2Header state =
     div
-        [ id "p2-container"
-        , styleList [ flexStyle, columnStyle, bgColor "#d8d8d8", flex 1 0 ]
-        ]
+        [ id P2Container ]
         [ div
-            [ class "player-top-container"
-            , styleList [ flexStyle, columnStyle, aiStyle "flex-start", flex 3 0 ]
-            ]
+            [ class TopContainer ]
             [ div
-                [ id "player2-token"
-                , styleList [ flexStyle, aiStyle "flex-start" ]
-                ]
+                [ id P2Token ]
                 [ playerToken state.player2 ]
             , div
-                [ class "name-container" ]
+                [ class NameContainer ]
                 [ div
-                    [ class "player-name"
-                    , styleList [ aiStyle "flex-end", txtCol "#fafafa" ]
-                    ]
+                    [ class PlayerName ]
                     [ text state.player2.name ]
                 ]
             , div
-                [ class "score-container"
+                [ class ScoreContainer
                 , styleList [ flexStyle ]
                 ]
                 [ div
-                    [ class "player-score"
-                    , styleList [ flexStyle, centerStyle, txtCol "#fafafa" ]
-                    ]
+                    [ class PlayerScore ]
                     [ text <| toString state.player2.score ]
                 ]
             ]
         , div
-            [ class "player-bottom-container"
-            , styleList [ flexStyle, aiStyle "flex-end", flex 1 0 ]
-            ]
-            [ div
-                [ class "btn-container" ]
-                [ div
-                    [ id "restart-btn" ]
-                    [ text "Restart" ]
-                , div
-                    [ id "reset-btn" ]
-                    [ text "Reset" ]
-                ]
-            ]
+            [ class BottomContainer ]
+            [ gameBtns ]
         ]
 
 
@@ -118,17 +90,13 @@ playerToken player =
                     "O"
     in
         div
-            [ class "token-container"
-            , styleList [ flexStyle, centerStyle ]
+            [ class TokenContainer
+            , styleList
             ]
             [ div
-                [ class "token-inner-container"
-                , styleList [ flexStyle, centerStyle, innerStyle ]
-                ]
+                [ class TokenInner ]
                 [ div
-                    [ class "player-token"
-                    , styleList [ tokenStyle, flex 1 0 ]
-                    ]
+                    [ class PlayerToken ]
                     [ text token ]
                 ]
             ]

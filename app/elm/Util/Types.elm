@@ -83,3 +83,48 @@ type Action
     | Msg Message.Msg
     | SetPlayer1 String
     | SetPlayer2 String
+
+
+type CssIds
+    = P1Container
+    | P2Container
+    | P1Token
+    | P2Token
+    | SelectedTile
+    | GameBtns
+    | BreakBtns
+    | ConfigBtn
+    | StartBtn
+    | MsgPanel
+    | GameContainer
+    | GameInner
+    | BreakContainer
+    | MiddlePanel
+    | BoardPanel
+    | OuterContainer
+    | InnerContainer
+    | GameTitle
+    | InstructionPanel
+    | InstructionAnchor
+    | TopPanel
+    | GameMainContainer
+    | GamePanel
+
+
+type CssClasses
+    = TopContainer
+    | PlayerName
+    | PlayerScore
+    | BottomContainer
+    | NameContainer
+    | ScoreContainer
+    | TokenContainer
+    | TokenInner
+    | PlayerToken
+    | BtnBase
+    | BoardCell
+    | CellBtn
+    | BoardRow
+    | PlayerPanel
+    | PlyrConfigPanel
+    | PlyrConfigLabel

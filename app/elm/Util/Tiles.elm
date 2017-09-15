@@ -2,8 +2,9 @@ module Util.Tiles exposing (randomTile)
 
 import Random exposing (Generator, int, Seed)
 import Dict
+import Monocle.Lens exposing (modify)
 import Util.Types exposing (..)
-import Util.Lenses exposing (tileSeedL, currTileL)
+import Util.Lenses exposing (tileSeedL, currTileL, tileRefL)
 import Util.View exposing (tileToString)
 
 
@@ -20,26 +21,24 @@ randomTile tile =
 
         newKey =
             tileToString newTile
+
+        setCount k v =
+            if k == newKey then
+                v + 1
+            else
+                v
     in
         case Dict.get newKey tile.ref of
             Nothing ->
-                { tile | ref = Dict.insert newKey 1 tile.ref }
+                tile
+                    |> modify tileRefL (Dict.insert newKey 1)
                     |> currTileL.set newTile
                     |> tileSeedL.set newSeed
 
             Just val ->
                 if (val < 5) then
-                    { tile
-                        | ref =
-                            Dict.map
-                                (\k v ->
-                                    if k == newKey then
-                                        v + 1
-                                    else
-                                        v
-                                )
-                                tile.ref
-                    }
+                    tile
+                        |> modify tileRefL (Dict.map setCount)
                         |> currTileL.set newTile
                         |> tileSeedL.set newSeed
                 else

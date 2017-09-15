@@ -1,7 +1,26 @@
 module Game.Board.Styles exposing (..)
 
+import Css exposing (..)
+import Css.Namespace exposing (namespace)
+import Html.CssHelpers exposing (Namespace, withNamespace)
 import Util.Types exposing (..)
 import Util.View exposing (..)
+
+
+css : Stylesheet
+css =
+    (stylesheet << namespace boardNS.name)
+        [ id GameInner
+            [ displayFlex, boardContainerStyle ]
+        , id GameContainer
+            [ displayFlex, centerStyle, flex2 (int 4) (int 0), bgColor "1e0812" ]
+        , class BoardCell
+            [ displayFlex, centerStyle, rel, tileStyle, flex2 (int 1) (int 0) ]
+        , class CellBtn
+            [ cellBtnStyle ]
+        , class BoardRow
+            [ displayFlex, columnStyle, flex2 (int 1) (int 0) ]
+        ]
 
 
 highlightStyle : Cell -> List Attr
@@ -14,28 +33,36 @@ highlightStyle cell =
             []
 
 
-tileStyle : List Attr
+tileStyle : Mixin
 tileStyle =
-    [ "border" => "1px solid #8d8d8d"
-    , "border-radius" => "4px"
-    , "z-index" => "1"
-    , "background" => "#1e0812"
-    ]
+    mixin
+        [ border3 (px 1) solid (hex "8d8d8d")
+        , borderRadius (px 4)
+        , zIndex (int 1)
+        , bgColor "1e0812"
+        ]
 
 
-boardContainerStyle : List Attr
+boardContainerStyle : Mixin
 boardContainerStyle =
-    [ "height" => "70vh"
-    , "width" => "70vh"
-    ]
+    mixin
+        [ height (vh 70)
+        , width (vw 70)
+        ]
 
 
-cellBtnStyle : List Attr
+cellBtnStyle : Mixin
 cellBtnStyle =
-    [ "width" => "90%"
-    , "height" => "90%"
-    , "border-radius" => "5px"
-    , "box-sizing" => "border-box"
-    , "position" => "relative"
-    , "z-index" => "10"
-    ]
+    mixin
+        [ width (pct 90)
+        , height (pct 90)
+        , borderRadius (px 5)
+        , boxSizing borderBox
+        , position relative
+        , zIndex (int 10)
+        ]
+
+
+boardNS : Namespace String class id msg
+boardNS =
+    withNamespace "board"

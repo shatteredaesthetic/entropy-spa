@@ -9,17 +9,19 @@ import Config.Styles exposing (..)
 import Ctrl.View exposing (configBtn)
 
 
+{ id, class, classList } =
+    configNS
+
+
 configUI : ConfigState -> Html Action
 configUI state =
     div
-        [ id "config-outer-container"
-        , styleList [ flexStyle, centerStyle, stretchStyle ]
-        ]
+        [ id OuterContainer ]
         [ div
-            [ id "config-container"
-            , styleList [ flexStyle, columnStyle, ht "100%", wd "70%", jcStyle "space-around", aiStyle "stretch" ]
-            ]
-            [ div [ styleList [ flexStyle, centerStyle, flex 2 0, titleStyle ] ] [ text "Entropy" ]
+            [ id InnerContainer ]
+            [ div
+                [ id GameTitle ]
+                [ text "Entropy" ]
             , namesPanel state
             , configBtn
             , instPanel
@@ -30,16 +32,12 @@ configUI state =
 namesPanel : ConfigState -> Html Action
 namesPanel state =
     div
-        [ id "config-top-panel"
-        , styleList [ flexStyle, aiStyle "center", jcStyle "space-around", bgColor "#d8d8d8", flex 3 0 ]
-        ]
+        [ id TopPanel ]
         [ div
-            [ id "player-config-panel"
-            , styleList [ flexStyle, centerStyle, columnStyle ]
-            ]
+            [ id PlyrConfigPanel ]
             [ label
                 [ for "player1-name"
-                , style labelStyle
+                , class PlyrConfigLabel
                 ]
                 [ text "Player 1:" ]
             , input
@@ -51,12 +49,10 @@ namesPanel state =
                 []
             ]
         , div
-            [ id "player-config-panel"
-            , styleList [ flexStyle, centerStyle, columnStyle ]
-            ]
+            [ id PlyrConfigPanel ]
             [ label
                 [ for "player2-name"
-                , style labelStyle
+                , class PlyrConfigLabel
                 ]
                 [ text "Player 2:" ]
             , input
@@ -73,14 +69,12 @@ namesPanel state =
 instPanel : Html Action
 instPanel =
     div
-        [ id "config-instructions"
-        , styleList [ flexStyle, columnStyle, bgColor "#d8d8d8", flex 4 0 ]
-        ]
+        [ id InstructionPanel ]
         [ h3
-            [ id "config-instructions-link" ]
+            []
             [ text "From "
             , a
-                [ style anchorStyle
+                [ id InstructionAnchor
                 , href "https://boardgamegeek.com/boardgame/1329/hyle"
                 ]
                 [ text "BoardGameGeek" ]

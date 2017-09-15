@@ -1,7 +1,7 @@
 module Game.Board.View exposing (view)
 
 import Html exposing (..)
-import Html.Attributes exposing (id, style)
+import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 import Array
 import Maybe
@@ -9,6 +9,10 @@ import Matrix exposing (Matrix)
 import Util.Types exposing (..)
 import Util.View exposing (..)
 import Game.Board.Styles exposing (..)
+
+
+{ id, class, classList } =
+    boardNS
 
 
 view : Matrix Cell -> Html Action
@@ -20,39 +24,29 @@ view board =
         boardView =
             List.range 0 4
                 |> List.map (makeBoardRow newBoard)
-                |> div
-                    [ id "game-board-container"
-                    , styleList [ flexStyle, boardContainerStyle ]
-                    ]
+                |> div [ id GameInner ]
 
         contStyle =
             [ "padding" => "5px 0px 5 px 0px" ]
     in
         div
-            [ styleList [ flexStyle, centerStyle, flex 4 0, bgColor "#1e0812" ] ]
+            [ id GameContainer ]
             [ boardView ]
 
 
 cellView : Cell -> Html Action
 cellView cell =
-    let
-        bgStyle =
-            bgColor <| getHexColor cell.colour
-
-        outerStyle =
-            styleList [ flexStyle, centerStyle, rel, tileStyle, highlightStyle cell, flex 1 0 ]
-    in
-        div
-            [ id "board-cell"
-            , outerStyle
-            , onClick (Choose cell.x cell.y)
+    div
+        [ class BoardCell
+        , style <| highlightStyle cell
+        , onClick (Choose cell.x cell.y)
+        ]
+        [ div
+            [ class CellBtn
+            , style <| [ (=>) "background" <| String.cons '#' <| getHexColor cell.colour ]
             ]
-            [ div
-                [ id "cell-btn"
-                , styleList [ cellBtnStyle, bgStyle ]
-                ]
-                []
-            ]
+            []
+        ]
 
 
 makeBoardRow : Matrix (Html Action) -> Int -> Html Action
@@ -60,7 +54,4 @@ makeBoardRow board y =
     Matrix.getRow y board
         |> Maybe.map Array.toList
         |> Maybe.withDefault []
-        |> div
-            [ id "board-row"
-            , styleList [ flexStyle, columnStyle, flex 1 0 ]
-            ]
+        |> div [ class BoardRow ]
