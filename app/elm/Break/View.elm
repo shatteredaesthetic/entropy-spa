@@ -19,7 +19,7 @@ breakUI state =
 
 middlePanel : Board -> Html Action
 middlePanel board =
-    columnWrap []
+    middleCont []
         [ breakBd [] [ Board.view board ]
         , breakBtns
         ]
@@ -33,13 +33,14 @@ plyrPanel plyr =
         ]
 
 
+middleCont : StyledComponent
+middleCont =
+    styled columnWrap [ flex (int 3) (int 0) (percent 60) ]
+
+
 breakCont : StyledComponent
 breakCont =
-    styled div
-        [ display flex_
-        , width (percent 100)
-        , height (percent 100)
-        ]
+    styled stretchWrap [ display flex_ ]
 
 
 breakBd : StyledComponent
@@ -49,14 +50,17 @@ breakBd =
 
 plyrPanelCont : StyledComponent
 plyrPanelCont =
-    styled columnWrap [ width (percent 25) ]
+    styled columnWrap
+        [ width (percent 25)
+        , flex (int 1) (int 0) (percent 20)
+        ]
 
 
 scoreCont : StyledComponent
 scoreCont =
     styled centerWrap
-        [ backgroundColor (hex "d8d8d8")
-        , color (hex "1e0812")
+        [ backgroundColor (hex "daad86")
+        , color (hex "312c32")
         , fontSize (em 7)
         ]
 
@@ -66,7 +70,7 @@ nameCont =
     styled div
         [ display flex_
         , alignItems center
-        , backgroundColor (hex "d8d8d8")
-        , color (hex "1e0812")
+        , backgroundColor (hex "89dafc")
+        , color (hex "312c32")
         , fontSize (em 5)
         ]

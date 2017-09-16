@@ -63,11 +63,14 @@ msgL =
                 InGame st ->
                     InGame { st | message = m }
 
-                OutGame st ->
-                    OutGame st
+                Break st ->
+                    Break st
 
                 Config st ->
                     Config st
+
+                GameOver st ->
+                    GameOver st
     in
         Lens get set
 

@@ -47,12 +47,14 @@ plyrCfg val msg nm lbl =
 instPanel : Html Action
 instPanel =
     descCont []
-        [ h3 []
-            [ text "From "
-            , anchComp [ href "https://boardgamegeek.com/boardgame/1329/hyle" ]
-                [ text "BoardGameGeek" ]
+        [ instInnerCont []
+            [ h3 []
+                [ text "From "
+                , anchComp [ href "https://boardgamegeek.com/boardgame/1329/hyle" ]
+                    [ text "BoardGameGeek" ]
+                ]
+            , instructions
             ]
-        , instructions
         ]
 
 
@@ -86,7 +88,8 @@ title : StyledComponent
 title =
     styled centerWrap
         [ flex (int 2) (int 0) auto
-        , color (hex "b61e64")
+        , color (hex "98dafc")
+        , textShadow (px 0) (px 0) (px 40) (hex "b88b64")
         , backgroundColor (hex "d8d8d8")
         , fontWeight (int 600)
         , fontSize (em 3)
@@ -101,13 +104,14 @@ namesCont =
         , justifyContent spaceAround
         , flex (int 3) (int 0) auto
         , backgroundColor (hex "d8d8d8")
+        , color (hex "312c32")
         ]
 
 
 lblStyle : StyledComponent
 lblStyle =
     styled label
-        [ color (hex "b61e64")
+        [ color (hex "daad86")
         , fontWeight (int 600)
         ]
 
@@ -120,11 +124,26 @@ plyrCfgCont =
 descCont : StyledComponent
 descCont =
     styled columnWrap
-        [ flex (int 4) (int 0) auto
-        , backgroundColor (hex "d8d8d8")
+        [ display flex_
+        , justifyContent center
+        , alignItems center
+        , flex (int 4) (int 0) auto
+        , color (hex "312c32")
+        ]
+
+
+instInnerCont : StyledComponent
+instInnerCont =
+    styled columnWrap
+        [ alignItems center
+        , justifyContent flexStart
+        , width (percent 90)
+        , backgroundColor (hex "feffff")
+        , padding2 zero (Styled.rem 1)
+        , boxShadow (px 1) (px 1) (px 5) (px 1) (hex "312c32")
         ]
 
 
 anchComp : StyledComponent
 anchComp =
-    styled a [ color (hex "b61e64") ]
+    styled a [ color (hex "daad86") ]

@@ -49,7 +49,7 @@ update msg state =
                 _ ->
                     R.singleton <| InGame s
 
-        OutGame s ->
+        Break s ->
             case msg of
                 Reset ->
                     R.singleton <| Config (ConfigState "" "" s.tiles.seed)
@@ -65,4 +65,12 @@ update msg state =
                         |> R.singleton
 
                 _ ->
-                    R.singleton <| OutGame s
+                    R.singleton <| Break s
+
+        GameOver s ->
+            case msg of
+                Reset ->
+                    R.singleton <| Config (ConfigState "" "" s.tiles.seed)
+
+                _ ->
+                    R.singleton <| GameOver s

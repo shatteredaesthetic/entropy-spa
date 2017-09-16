@@ -51,9 +51,12 @@ boardCont =
 
 boardViewCont : StyledComponent
 boardViewCont =
-    styled centerWrap
-        [ flex (int 4) (int 0) auto
-        , backgroundColor (hex "1e0812")
+    styled div
+        [ display flex_
+        , alignItems flexEnd
+        , justifyContent center
+        , flex (int 3) (int 0) (percent 75)
+        , backgroundColor (hex "312c32")
         ]
 
 
@@ -74,8 +77,8 @@ cellOuterCont hghlgt =
         List.concat
             [ [ flex (int 1) (int 0) auto
               , borderRadius (px 4)
-              , backgroundColor (hex "1e0812")
-              , border (px 1) solid (hex "8d8d8d")
+              , backgroundColor (hex "312c32")
+              , border (px 1) solid (hex "daad86")
               ]
             , highlightStyle hghlgt
             ]
@@ -90,7 +93,7 @@ highlightStyle : Bool -> List Rule
 highlightStyle hghlgt =
     case hghlgt of
         True ->
-            [ backgroundColor (hex "f4fc14") ]
+            [ backgroundColor (hex "98dafc") ]
 
         False ->
             []

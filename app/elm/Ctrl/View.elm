@@ -24,6 +24,11 @@ cfgBtns =
     cfgBtnsCont [] [ startBtn ]
 
 
+goBtns : Html Action
+goBtns =
+    goBtnsCont [] [ gameOverBtn ]
+
+
 startBtn : Html Action
 startBtn =
     btnCont [ onClick (Btn StartGame) ] [ text "Start Game" ]
@@ -42,6 +47,11 @@ restartBtn =
 resetBtn : Html Action
 resetBtn =
     btnCont [ onClick (Btn Reset) ] [ text "Reset" ]
+
+
+gameOverBtn : Html Action
+gameOverBtn =
+    btnCont [ onClick (Btn Reset) ] [ text "Play Again?" ]
 
 
 gameBtnsCont : StyledComponent
@@ -73,13 +83,19 @@ cfgBtnsCont =
         ]
 
 
+goBtnsCont : StyledComponent
+goBtnsCont =
+    styled centerWrap
+        [ backgroundColor (hex "312c32") ]
+
+
 btnCont : StyledComponent
 btnCont =
     styled centerWrap
         [ cursor pointer
-        , backgroundColor (hex "b61e64")
-        , color (hex "fafafa")
+        , backgroundColor (hex "98dafc")
+        , color (hex "312c32")
         , borderRadius (px 5)
         , padding (px 10)
-        , border (px 1) solid (hex "1e0812")
+        , border (px 1) solid (hex "312c32")
         ]

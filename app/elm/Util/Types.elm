@@ -11,7 +11,8 @@ import VirtualDom exposing (Property, Node)
 type GameState
     = Config ConfigState
     | InGame InGameState
-    | OutGame InGameState
+    | Break InGameState
+    | GameOver InGameState
 
 
 type alias ConfigState =

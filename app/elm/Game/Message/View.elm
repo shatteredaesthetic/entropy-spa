@@ -19,13 +19,13 @@ msgCont : StyledComponent
 msgCont =
     styled div
         [ display flex_
-        , flex (int 1) (int 0) auto
+        , flex (int 1) (int 0) (percent 25)
         , justifyContent flexStart
         , alignContent center
-        , backgroundColor (hex "1e0812")
-        , color (hex "fafafa")
+        , backgroundColor (hex "312c32")
+        , color (hex "feffff")
         , fontFamily monospace
-        , boxShadow (px 0) (px 2) (px 2) (px 0) (hex "d8d8d8")
+        , fontSize (em 1.5)
         ]
 
 

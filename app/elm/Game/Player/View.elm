@@ -63,7 +63,6 @@ plyrTopCont =
         [ flex (int 5) (int 0) auto
         , alignContent flexStart
         , alignItems stretch
-        , border (px 2) solid (hex "00aa00")
         ]
 
 
@@ -71,8 +70,7 @@ tokenCont : StyledComponent
 tokenCont =
     styled centerWrap
         [ flex (int 3) (int 0) (percent 40)
-        , border (px 2) solid (hex "aa0000")
-        , backgroundColor (hex "1e0812")
+        , backgroundColor (hex "312c32")
         ]
 
 
@@ -80,10 +78,10 @@ nameCont : StyledComponent
 nameCont =
     styled centerWrap
         [ flex (int 2) (int 0) (percent 30)
-        , color (hex "1e0812")
+        , color (hex "312c32")
         , fontSize (em 5)
-        , backgroundColor (hex "d8d8d8")
-        , textShadow zero zero (px 15) (hex "727272")
+        , backgroundColor (hex "feffff")
+        , textShadow zero zero (px 15) (hex "98dafc")
         ]
 
 
@@ -91,11 +89,10 @@ scoreCont : StyledComponent
 scoreCont =
     styled centerWrap
         [ flex (int 1) (int 0) (percent 30)
-        , color (hex "fafafa")
-        , backgroundColor (hex "1e0812")
-        , textShadow zero zero (px 20) (hex "b61e64")
+        , color (hex "feffff")
+        , backgroundColor (hex "312c32")
+        , textShadow zero zero (px 20) (hex "daad86")
         , fontSize (em 7)
-        , border (px 2) solid (hex "0000aa")
         ]
 
 
@@ -135,7 +132,7 @@ plyrBottomCont =
         , alignContent flexEnd
         , justifyContent center
         , alignItems center
-        , backgroundColor (hex "727272")
+        , backgroundColor (hex "daad86")
         ]
 
 
@@ -144,14 +141,14 @@ tokenUI =
     styled div
         [ display flex_
         , flex (int 1) (int 0) auto
-        , color (hex "b61e64")
+        , color (hex "98dafc")
         , padding (px 5)
         , fontSize (em 9)
         , fontWeight (int 700)
         , boxSizing borderBox
-        , border (px 5) solid (hex "1e0812")
-        , backgroundColor (hex "1e0812")
-        , textShadow zero zero (px 10) (hex "fafafa")
+        , border (px 5) solid (hex "312c32")
+        , backgroundColor (hex "312c32")
+        , textShadow zero zero (px 10) (hex "feffff")
         ]
 
 

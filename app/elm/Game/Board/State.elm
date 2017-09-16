@@ -111,10 +111,11 @@ updateChaos x y state =
                     |> boardL.set newBoard
                     |> currCellL.set emptyCell
                     |> (if state.nextRound then
-                            makeBreak <| score newBoard
+                            (adjustPlyrs <| score newBoard) >> Break
                         else
-                            makeBreak <| score newBoard
+                            (adjustPlyrs <| score newBoard) >> GameOver
                        )
+                    |> R.singleton
 
             False ->
                 if validateChaos x y state.board then
@@ -127,16 +128,14 @@ updateChaos x y state =
                     R.return (InGame state) (setMsg "You can't put a Tile on another Tile.")
 
 
-makeBreak : Int -> InGameState -> Return Action GameState
-makeBreak pts state =
+adjustPlyrs : Int -> InGameState -> InGameState
+adjustPlyrs pts state =
     let
         f ( l1, l2 ) l3 =
             state
                 |> l1.set pts
                 |> l2.set (switchRole <| l2.get state)
                 |> l3.set (switchRole <| l3.get state)
-                |> OutGame
-                |> R.singleton
     in
         if state.nextRound then
             f ( p2ScoreL, p2RoleL ) p1RoleL
