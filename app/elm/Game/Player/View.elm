@@ -5,6 +5,7 @@ import Html.Attributes exposing (style, class)
 import Game.Board.View exposing (cellBtnCont, cellOuterCont)
 import Util.Types exposing (..)
 import Util.View exposing (..)
+import Util.Lenses exposing (..)
 import Ctrl.View exposing (gameBtns)
 import Styled exposing (..)
 
@@ -19,7 +20,7 @@ p1Header { player1, tiles } =
             , scoreCont [] [ text <| toString player1.score ]
             ]
         , plyrBottomCont []
-            [ centered [] [ selectedCellView tiles.current ] ]
+            [ centered [] [ selectedCellView <| currColourL.get tiles ] ]
         ]
 
 

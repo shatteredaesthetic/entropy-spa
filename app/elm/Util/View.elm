@@ -94,7 +94,7 @@ centerWrap =
     styled div
         [ display flex_
         , justifyContent center
-        , alignContent center
+        , alignItems center
         ]
 
 

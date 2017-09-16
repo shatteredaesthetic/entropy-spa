@@ -66,7 +66,7 @@ type Colour
 
 
 type alias TileState =
-    { current : Colour
+    { current : Cell
     , ref : Dict String Int
     , seed : Seed
     }

@@ -28,8 +28,10 @@ init { randSeed } =
 
 viewCont : StyledComponent
 viewCont =
-    styled stretchWrap
+    styled div
         [ display flex_
+        , width (vw 100)
+        , height (vh 100)
         , backgroundColor (hex "1e0812")
         ]
 

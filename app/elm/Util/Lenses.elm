@@ -77,7 +77,7 @@ tilesL =
     Lens .tiles <| \t s -> { s | tiles = t }
 
 
-currTileL : Lens TileState Colour
+currTileL : Lens TileState Cell
 currTileL =
     Lens .current <| \c t -> { t | current = c }
 
@@ -87,9 +87,44 @@ tileSeedL =
     Lens .seed <| \s t -> { t | seed = s }
 
 
+currCellL : Lens InGameState Cell
+currCellL =
+    Lens.compose tilesL currTileL
+
+
+colourL : Lens Cell Colour
+colourL =
+    Lens .colour <| \c cl -> { cl | colour = c }
+
+
+cellXL : Lens Cell Int
+cellXL =
+    Lens .x <| \x c -> { c | x = x }
+
+
+cellYL : Lens Cell Int
+cellYL =
+    Lens .y <| \y c -> { c | y = y }
+
+
+currXL : Lens InGameState Int
+currXL =
+    Lens.compose currCellL cellXL
+
+
+currYL : Lens InGameState Int
+currYL =
+    Lens.compose currCellL cellYL
+
+
+currColourL : Lens TileState Colour
+currColourL =
+    Lens.compose currTileL colourL
+
+
 currL : Lens InGameState Colour
 currL =
-    Lens.compose tilesL currTileL
+    Lens.compose currCellL colourL
 
 
 seedL : Lens InGameState Seed

@@ -3,6 +3,7 @@ module Util.Tiles exposing (randomTile)
 import Random exposing (Generator, int, Seed)
 import Dict
 import Util.Types exposing (..)
+import Util.State exposing (newTile)
 import Util.Lenses exposing (tileSeedL, currTileL)
 import Util.View exposing (tileToString)
 
@@ -15,16 +16,16 @@ tileGenerator intGenerator =
 randomTile : TileState -> TileState
 randomTile tile =
     let
-        ( newTile, newSeed ) =
+        ( nTile, newSeed ) =
             Random.step (tileGenerator (int 0 5)) tile.seed
 
         newKey =
-            tileToString newTile
+            tileToString nTile
     in
         case Dict.get newKey tile.ref of
             Nothing ->
                 { tile | ref = Dict.insert newKey 1 tile.ref }
-                    |> currTileL.set newTile
+                    |> (currTileL.set <| newTile nTile)
                     |> tileSeedL.set newSeed
 
             Just val ->
@@ -40,7 +41,7 @@ randomTile tile =
                                 )
                                 tile.ref
                     }
-                        |> currTileL.set newTile
+                        |> (currTileL.set <| newTile nTile)
                         |> tileSeedL.set newSeed
                 else
                     randomTile { tile | seed = newSeed }

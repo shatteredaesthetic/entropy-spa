@@ -38,11 +38,11 @@ updateGame action state =
 
 updateOrder : Int -> Int -> InGameState -> Return Action GameState
 updateOrder x y state =
-    case state.tiles.current of
-        NoTile ->
+    case currCellL.get state == emptyCell of
+        True ->
             orderFirstMove x y state
 
-        _ ->
+        False ->
             orderSecondMove x y state.tiles.current state
 
 
@@ -59,28 +59,40 @@ orderFirstMove x y state =
 
             _ ->
                 state
-                    |> currL.set colour_
+                    |> (currCellL.set <| Cell colour_ False x y)
                     |> modify boardL ((Matrix.update x y (\cell -> { cell | colour = NoTile })) >> (highlightNeighbors x y))
                     |> InGame
                     |> ret (setMsg "Place tile in any Empty Cell.")
 
 
-orderSecondMove : Int -> Int -> Colour -> InGameState -> Return Action GameState
+orderSecondMove : Int -> Int -> Cell -> InGameState -> Return Action GameState
 orderSecondMove x y tile state =
     case getCellColour x y state.board of
         NoTile ->
             let
                 newTiles =
                     randomTile state.tiles
+
+                colour =
+                    colourL.get tile
             in
-                if validateOrder x y state.board then
-                    { state | turn = Chaos }
-                        |> modify boardL (Matrix.set x y (Cell tile False x y) >> removeHighlights)
-                        |> tilesL.set newTiles
-                        |> InGame
-                        |> ret (setMsg "Place new Tile in any Empty Cell.")
-                else
-                    R.return (InGame state) (setMsg "You can't put a Tile on another Tile.")
+                case validateOrder x y state of
+                    InValid ->
+                        R.return (InGame state) (setMsg "You can't put a Tile on another Tile.")
+
+                    Valid ->
+                        { state | turn = Chaos }
+                            |> modify boardL (Matrix.set x y (Cell colour False x y) >> removeHighlights)
+                            |> tilesL.set newTiles
+                            |> InGame
+                            |> ret (setMsg "Place new Tile in any Empty Cell.")
+
+                    NoMove ->
+                        state
+                            |> modify boardL (Matrix.set x y tile >> removeHighlights)
+                            |> currCellL.set emptyCell
+                            |> InGame
+                            |> ret (setMsg "Select any tile of board.")
 
         _ ->
             InGame state
@@ -97,7 +109,7 @@ updateChaos x y state =
             True ->
                 state
                     |> boardL.set newBoard
-                    |> currL.set NoTile
+                    |> currCellL.set emptyCell
                     |> (if state.nextRound then
                             makeBreak <| score newBoard
                         else
@@ -108,7 +120,7 @@ updateChaos x y state =
                 if validateChaos x y state.board then
                     { state | turn = Order }
                         |> boardL.set newBoard
-                        |> currL.set NoTile
+                        |> currCellL.set emptyCell
                         |> InGame
                         |> ret (setMsg "Select any Tile on Board.")
                 else

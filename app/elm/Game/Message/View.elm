@@ -3,6 +3,7 @@ module Game.Message.View exposing (..)
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (class)
 import Game.Message.Types exposing (..)
+import Game.Message.State exposing (messageL)
 import Util.Types exposing (..)
 import Styled exposing (..)
 
@@ -11,7 +12,7 @@ view : Model -> Html Action
 view model =
     msgCont
         [ class "game-footer" ]
-        [ text <| ">  " ++ showContent model.message ]
+        [ text <| ">  " ++ (showContent <| messageL.get model) ]
 
 
 msgCont : StyledComponent

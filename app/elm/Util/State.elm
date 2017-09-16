@@ -9,6 +9,7 @@ import Dict
 import Return as R exposing (Return)
 import Random exposing (Seed, initialSeed)
 import Util.Types exposing (..)
+import Util.Lenses exposing (..)
 import Game.Message.Types exposing (Msg(Print))
 
 
@@ -91,14 +92,28 @@ isBoardFull =
     >>> validateOrder 1 1 <| makeBoard
     False
 -}
-validateOrder : Int -> Int -> Board -> Bool
-validateOrder x y board =
-    case Matrix.get x y board of
+validateOrder : Int -> Int -> InGameState -> OrderResult
+validateOrder x y state =
+    case Matrix.get x y state.board of
         Nothing ->
-            False
+            InValid
 
         Just cell ->
-            cell.highlight
+            case ( cell.highlight, currXL.get state == x, currYL.get state == y ) of
+                ( True, _, _ ) ->
+                    Valid
+
+                ( False, True, True ) ->
+                    NoMove
+
+                _ ->
+                    InValid
+
+
+type OrderResult
+    = InValid
+    | Valid
+    | NoMove
 
 
 {-| validateChaos - Validate's Chaos' move, ie. if the cell has a colour of Nothing
@@ -149,7 +164,7 @@ removeHighlights =
 
 resetTiles : Seed -> TileState
 resetTiles =
-    TileState NoTile Dict.empty
+    TileState emptyCell Dict.empty
 
 
 setMsg : String -> Cmd Action
@@ -176,3 +191,13 @@ boardEmpty board =
         |> .data
         |> Array.toList
         |> List.all (\c -> c == NoTile)
+
+
+emptyCell : Cell
+emptyCell =
+    Cell NoTile False 0 0
+
+
+newTile : Colour -> Cell
+newTile colour =
+    Cell colour False 0 0
