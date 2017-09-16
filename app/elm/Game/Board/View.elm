@@ -1,4 +1,4 @@
-module Game.Board.View exposing (view, cellOuterCont, cellBtnCont)
+module Game.Board.View exposing (view, cellOuterWrap, cellBtnWrap)
 
 import Html exposing (..)
 import Html.Events exposing (onClick)
@@ -20,16 +20,16 @@ view board =
         boardView =
             List.range 0 4
                 |> List.map (makeBoardRow newBoard)
-                |> boardCont []
+                |> boardWrap []
     in
-        boardViewCont [] [ boardView ]
+        boardViewWrap [] [ boardView ]
 
 
 cellView : Cell -> Html Action
 cellView cell =
-    cellOuterCont cell.highlight
+    cellOuterWrap cell.highlight
         [ onClick (Choose cell.x cell.y) ]
-        [ cellBtnCont cell.colour [] [] ]
+        [ cellBtnWrap cell.colour [] [] ]
 
 
 makeBoardRow : Matrix (Html Action) -> Int -> Html Action
@@ -37,11 +37,11 @@ makeBoardRow board y =
     Matrix.getRow y board
         |> Maybe.map Array.toList
         |> Maybe.withDefault []
-        |> rowCont []
+        |> rowWrap []
 
 
-boardCont : StyledComponent
-boardCont =
+boardWrap : StyledComponent
+boardWrap =
     styled div
         [ display flex_
         , width (vh 70)
@@ -49,8 +49,8 @@ boardCont =
         ]
 
 
-boardViewCont : StyledComponent
-boardViewCont =
+boardViewWrap : StyledComponent
+boardViewWrap =
     styled div
         [ display flex_
         , alignItems flexEnd
@@ -60,8 +60,8 @@ boardViewCont =
         ]
 
 
-cellBtnCont : Colour -> StyledComponent
-cellBtnCont col =
+cellBtnWrap : Colour -> StyledComponent
+cellBtnWrap col =
     styled div
         [ width (percent 90)
         , height (percent 90)
@@ -71,8 +71,8 @@ cellBtnCont col =
         ]
 
 
-cellOuterCont : Bool -> StyledComponent
-cellOuterCont hghlgt =
+cellOuterWrap : Bool -> StyledComponent
+cellOuterWrap hghlgt =
     styled centerWrap <|
         List.concat
             [ [ flex (int 1) (int 0) auto
@@ -84,8 +84,8 @@ cellOuterCont hghlgt =
             ]
 
 
-rowCont : StyledComponent
-rowCont =
+rowWrap : StyledComponent
+rowWrap =
     styled columnWrap [ flex (int 1) (int 0) auto ]
 
 

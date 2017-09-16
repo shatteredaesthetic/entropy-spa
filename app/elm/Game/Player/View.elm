@@ -2,7 +2,7 @@ module Game.Player.View exposing (..)
 
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (style, class)
-import Game.Board.View exposing (cellBtnCont, cellOuterCont)
+import Game.Board.View exposing (cellBtnWrap, cellOuterWrap)
 import Util.Types exposing (..)
 import Util.View exposing (..)
 import Util.Lenses exposing (..)
@@ -12,35 +12,35 @@ import Styled exposing (..)
 
 p1Header : InGameState -> Html Action
 p1Header { player1, tiles } =
-    plyrCont
+    plyrWrap
         [ class "p1-container" ]
-        [ plyrTopCont []
-            [ tokenCont [] [ playerToken player1 ]
-            , nameCont [] [ text player1.name ]
-            , scoreCont [] [ text <| toString player1.score ]
+        [ plyrTopWrap []
+            [ tokenWrap [] [ playerToken player1 ]
+            , nameWrap [] [ text <| String.left 7 player1.name ]
+            , scoreWrap [] [ text <| toString player1.score ]
             ]
-        , plyrBottomCont []
+        , plyrBottomWrap []
             [ centered [] [ selectedCellView <| currColourL.get tiles ] ]
         ]
 
 
 p2Header : InGameState -> Html Action
 p2Header { player2 } =
-    plyrCont
+    plyrWrap
         [ class "p2-container" ]
-        [ plyrTopCont []
-            [ tokenCont [] [ playerToken player2 ]
-            , nameCont [] [ text player2.name ]
-            , scoreCont [] [ text <| toString player2.score ]
+        [ plyrTopWrap []
+            [ tokenWrap [] [ playerToken player2 ]
+            , nameWrap [] [ text player2.name ]
+            , scoreWrap [] [ text <| toString player2.score ]
             ]
-        , plyrBottomCont []
+        , plyrBottomWrap []
             [ gameBtns ]
         ]
 
 
 selectedCellView : Colour -> Html Action
 selectedCellView colour =
-    cellOuterCont False [] [ cellBtnCont colour [] [] ]
+    cellOuterWrap False [] [ cellBtnWrap colour [] [] ]
 
 
 playerToken : Player -> Html Action
@@ -54,28 +54,28 @@ playerToken player =
                 Order ->
                     "O"
     in
-        centered [] [ outerCont [] [ tokenUI [] [ text token ] ] ]
+        centered [] [ outerWrap [] [ tokenUI [] [ text token ] ] ]
 
 
-plyrTopCont : StyledComponent
-plyrTopCont =
+plyrTopWrap : StyledComponent
+plyrTopWrap =
     styled columnWrap
-        [ flex (int 5) (int 0) auto
+        [ flex (int 4) (int 0) auto
         , alignContent flexStart
         , alignItems stretch
         ]
 
 
-tokenCont : StyledComponent
-tokenCont =
+tokenWrap : StyledComponent
+tokenWrap =
     styled centerWrap
         [ flex (int 3) (int 0) (percent 40)
         , backgroundColor (hex "312c32")
         ]
 
 
-nameCont : StyledComponent
-nameCont =
+nameWrap : StyledComponent
+nameWrap =
     styled centerWrap
         [ flex (int 2) (int 0) (percent 30)
         , color (hex "312c32")
@@ -85,8 +85,8 @@ nameCont =
         ]
 
 
-scoreCont : StyledComponent
-scoreCont =
+scoreWrap : StyledComponent
+scoreWrap =
     styled centerWrap
         [ flex (int 1) (int 0) (percent 30)
         , color (hex "feffff")
@@ -96,8 +96,8 @@ scoreCont =
         ]
 
 
-plyrCont : StyledComponent
-plyrCont =
+plyrWrap : StyledComponent
+plyrWrap =
     styled columnWrap
         [ flex (int 1) (int 0) auto
         , backgroundColor (hex "d8d8d8")
@@ -124,8 +124,8 @@ centered =
         ]
 
 
-plyrBottomCont : StyledComponent
-plyrBottomCont =
+plyrBottomWrap : StyledComponent
+plyrBottomWrap =
     styled div
         [ display flex_
         , flex (int 2) (int 0) auto
@@ -152,8 +152,8 @@ tokenUI =
         ]
 
 
-outerCont : StyledComponent
-outerCont =
+outerWrap : StyledComponent
+outerWrap =
     styled div
         [ display flex_
         , justifyContent center

@@ -11,51 +11,51 @@ import Util.View exposing (..)
 
 gameBtns : Html Action
 gameBtns =
-    gameBtnsCont [] [ restartBtn, resetBtn ]
+    gameBtnsWrap [] [ restartBtn, resetBtn ]
 
 
 breakBtns : Html Action
 breakBtns =
-    breakBtnsCont [] [ resetBtn, roundBtn ]
+    breakBtnsWrap [] [ resetBtn, roundBtn ]
 
 
 cfgBtns : Html Action
 cfgBtns =
-    cfgBtnsCont [] [ startBtn ]
+    cfgBtnsWrap [] [ startBtn ]
 
 
 goBtns : Html Action
 goBtns =
-    goBtnsCont [] [ gameOverBtn ]
+    goBtnsWrap [] [ gameOverBtn ]
 
 
 startBtn : Html Action
 startBtn =
-    btnCont [ onClick (Btn StartGame) ] [ text "Start Game" ]
+    btnWrap [ onClick (Btn StartGame) ] [ text "Start Game" ]
 
 
 roundBtn : Html Action
 roundBtn =
-    btnCont [ onClick (Btn NextRound) ] [ text "Next Round" ]
+    btnWrap [ onClick (Btn NextRound) ] [ text "Next Round" ]
 
 
 restartBtn : Html Action
 restartBtn =
-    btnCont [ onClick (Btn Restart) ] [ text "Restart" ]
+    btnWrap [ onClick (Btn Restart) ] [ text "Restart" ]
 
 
 resetBtn : Html Action
 resetBtn =
-    btnCont [ onClick (Btn Reset) ] [ text "Reset" ]
+    btnWrap [ onClick (Btn Reset) ] [ text "Reset" ]
 
 
 gameOverBtn : Html Action
 gameOverBtn =
-    btnCont [ onClick (Btn Reset) ] [ text "Play Again?" ]
+    btnWrap [ onClick (Btn Reset) ] [ text "Play Again?" ]
 
 
-gameBtnsCont : StyledComponent
-gameBtnsCont =
+gameBtnsWrap : StyledComponent
+gameBtnsWrap =
     styled div
         [ display flex_
         , justifyContent spaceAround
@@ -66,8 +66,8 @@ gameBtnsCont =
         ]
 
 
-breakBtnsCont : StyledComponent
-breakBtnsCont =
+breakBtnsWrap : StyledComponent
+breakBtnsWrap =
     styled stretchWrap
         [ display flex_
         , justifyContent spaceAround
@@ -75,22 +75,24 @@ breakBtnsCont =
         ]
 
 
-cfgBtnsCont : StyledComponent
-cfgBtnsCont =
+cfgBtnsWrap : StyledComponent
+cfgBtnsWrap =
     styled centerWrap
         [ backgroundColor (hex "d8d8d8")
         , flex (int 1) (int 0) auto
         ]
 
 
-goBtnsCont : StyledComponent
-goBtnsCont =
+goBtnsWrap : StyledComponent
+goBtnsWrap =
     styled centerWrap
-        [ backgroundColor (hex "312c32") ]
+        [ backgroundColor (hex "312c32")
+        , flex (int 1) (int 0) (percent 25)
+        ]
 
 
-btnCont : StyledComponent
-btnCont =
+btnWrap : StyledComponent
+btnWrap =
     styled centerWrap
         [ cursor pointer
         , backgroundColor (hex "98dafc")

@@ -10,67 +10,31 @@ import Util.View exposing (..)
 
 breakUI : InGameState -> Html Action
 breakUI state =
-    breakCont []
-        [ plyrPanel state.player1
+    breakWrap []
+        [ sidePanel state.player1
         , middlePanel state.board
-        , plyrPanel state.player2
+        , sidePanel state.player2
         ]
 
 
 middlePanel : Board -> Html Action
 middlePanel board =
-    middleCont []
+    middleWrap []
         [ breakBd [] [ Board.view board ]
         , breakBtns
         ]
 
 
-plyrPanel : Player -> Html Action
-plyrPanel plyr =
-    plyrPanelCont []
-        [ nameCont [] [ text plyr.name ]
-        , scoreCont [] [ text <| toString plyr.score ]
-        ]
-
-
-middleCont : StyledComponent
-middleCont =
+middleWrap : StyledComponent
+middleWrap =
     styled columnWrap [ flex (int 3) (int 0) (percent 60) ]
 
 
-breakCont : StyledComponent
-breakCont =
+breakWrap : StyledComponent
+breakWrap =
     styled stretchWrap [ display flex_ ]
 
 
 breakBd : StyledComponent
 breakBd =
     styled centerWrap [ height (percent 70) ]
-
-
-plyrPanelCont : StyledComponent
-plyrPanelCont =
-    styled columnWrap
-        [ width (percent 25)
-        , flex (int 1) (int 0) (percent 20)
-        ]
-
-
-scoreCont : StyledComponent
-scoreCont =
-    styled centerWrap
-        [ backgroundColor (hex "daad86")
-        , color (hex "312c32")
-        , fontSize (em 7)
-        ]
-
-
-nameCont : StyledComponent
-nameCont =
-    styled div
-        [ display flex_
-        , alignItems center
-        , backgroundColor (hex "89dafc")
-        , color (hex "312c32")
-        , fontSize (em 5)
-        ]

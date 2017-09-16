@@ -11,8 +11,8 @@ import Ctrl.View exposing (cfgBtns)
 
 cfgUI : ConfigState -> Html Action
 cfgUI state =
-    cfgOuterCont []
-        [ cfgCont []
+    cfgOuterWrap []
+        [ cfgWrap []
             [ title [] [ text "Entropy" ]
             , namesPanel state
             , cfgBtns
@@ -23,7 +23,7 @@ cfgUI state =
 
 namesPanel : ConfigState -> Html Action
 namesPanel { player1name, player2name } =
-    namesCont []
+    namesWrap []
         [ plyrCfg player1name SetPlayer1 "p1-name" "Player 1:"
         , plyrCfg player2name SetPlayer2 "p2-name" "Player 2:"
         ]
@@ -31,7 +31,7 @@ namesPanel { player1name, player2name } =
 
 plyrCfg : String -> (String -> Action) -> String -> String -> Html Action
 plyrCfg val msg nm lbl =
-    plyrCfgCont []
+    plyrCfgWrap []
         [ lblStyle [ for nm ]
             [ text lbl ]
         , input
@@ -46,8 +46,8 @@ plyrCfg val msg nm lbl =
 
 instPanel : Html Action
 instPanel =
-    descCont []
-        [ instInnerCont []
+    descWrap []
+        [ instInnerWrap []
             [ h3 []
                 [ text "From "
                 , anchComp [ href "https://boardgamegeek.com/boardgame/1329/hyle" ]
@@ -66,16 +66,16 @@ instructions =
         ]
 
 
-cfgOuterCont : StyledComponent
-cfgOuterCont =
+cfgOuterWrap : StyledComponent
+cfgOuterWrap =
     styled centerWrap
         [ width (percent 100)
         , height (percent 100)
         ]
 
 
-cfgCont : StyledComponent
-cfgCont =
+cfgWrap : StyledComponent
+cfgWrap =
     styled columnWrap
         [ height (percent 100)
         , width (percent 70)
@@ -96,8 +96,8 @@ title =
         ]
 
 
-namesCont : StyledComponent
-namesCont =
+namesWrap : StyledComponent
+namesWrap =
     styled div
         [ display flex_
         , alignItems center
@@ -116,13 +116,13 @@ lblStyle =
         ]
 
 
-plyrCfgCont : StyledComponent
-plyrCfgCont =
+plyrCfgWrap : StyledComponent
+plyrCfgWrap =
     styled centerWrap [ flexDirection column ]
 
 
-descCont : StyledComponent
-descCont =
+descWrap : StyledComponent
+descWrap =
     styled columnWrap
         [ display flex_
         , justifyContent center
@@ -132,15 +132,15 @@ descCont =
         ]
 
 
-instInnerCont : StyledComponent
-instInnerCont =
+instInnerWrap : StyledComponent
+instInnerWrap =
     styled columnWrap
         [ alignItems center
         , justifyContent flexStart
         , width (percent 90)
         , backgroundColor (hex "feffff")
         , padding2 zero (Styled.rem 1)
-        , boxShadow (px 1) (px 1) (px 5) (px 1) (hex "312c32")
+        , boxShadow (px 5) (px 5) (px 13) (px 1) (hex "312c32")
         ]
 
 

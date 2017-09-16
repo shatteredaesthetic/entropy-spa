@@ -11,7 +11,7 @@ import Game.Board.View as Board
 
 gameUI : InGameState -> Html Action
 gameUI state =
-    gameUICont []
+    gameUIWrap []
         [ p1Header state
         , gameView state
         , p2Header state
@@ -20,17 +20,17 @@ gameUI state =
 
 gameView : InGameState -> Html Action
 gameView { board, message } =
-    gameViewCont []
+    gameViewWrap []
         [ Board.view board
         , Message.view message
         ]
 
 
-gameUICont : StyledComponent
-gameUICont =
+gameUIWrap : StyledComponent
+gameUIWrap =
     styled stretchWrap [ display flex_ ]
 
 
-gameViewCont : StyledComponent
-gameViewCont =
+gameViewWrap : StyledComponent
+gameViewWrap =
     styled columnWrap [ justifyContent spaceAround ]

@@ -10,13 +10,13 @@ import Styled exposing (..)
 
 view : Model -> Html Action
 view model =
-    msgCont
+    msgWrap
         [ class "game-footer" ]
         [ text <| ">  " ++ (showContent <| messageL.get model) ]
 
 
-msgCont : StyledComponent
-msgCont =
+msgWrap : StyledComponent
+msgWrap =
     styled div
         [ display flex_
         , flex (int 1) (int 0) (percent 25)

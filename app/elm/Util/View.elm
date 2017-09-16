@@ -1,6 +1,6 @@
 module Util.View exposing (..)
 
-import Html exposing (Html, Attribute, div)
+import Html exposing (Html, Attribute, div, text)
 import Util.Types exposing (..)
 import Styled exposing (..)
 
@@ -103,4 +103,70 @@ stretchWrap =
     styled div
         [ width (percent 100)
         , height (percent 100)
+        ]
+
+
+sideWrap : StyledComponent
+sideWrap =
+    styled columnWrap
+        [ justifyContent flexEnd
+        , alignItems stretch
+        , flex (int 1) (int 0) (percent 20)
+        , paddingBottom (Styled.rem 1)
+        ]
+
+
+sidePanel : Player -> Html Action
+sidePanel plyr =
+    sideWrap []
+        [ emptyDiv
+        , plyrWrap []
+            [ nameWrap [] [ text <| String.left 7 plyr.name ]
+            , scoreWrap [] [ text <| toString plyr.score ]
+            ]
+        ]
+
+
+emptyDiv : Html Action
+emptyDiv =
+    styled div
+        [ display flex_
+        , flex (int 4) (int 0) (percent 70)
+        ]
+        []
+        []
+
+
+plyrWrap : StyledComponent
+plyrWrap =
+    styled columnWrap
+        [ flex (int 1) (int 0) (percent 30)
+        , justifyContent center
+        , alignItems center
+        , width (percent 100)
+        ]
+
+
+nameWrap : StyledComponent
+nameWrap =
+    styled centerWrap
+        [ color (hex "98dafc")
+        , flex (int 1) (int 0) (percent 35)
+        , textShadow zero zero (px 10) (hex "feffff")
+        , backgroundColor (hex "312c32")
+        , fontSize (em 5)
+        , paddingBottom (Styled.rem 1)
+        , width (percent 100)
+        ]
+
+
+scoreWrap : StyledComponent
+scoreWrap =
+    styled centerWrap
+        [ color (hex "312c32")
+        , flex (int 2) (int 0) (percent 65)
+        , textShadow zero zero (px 10) (hex "daad86")
+        , backgroundColor (hex "98dafc")
+        , fontSize (em 8)
+        , width (percent 100)
         ]
