@@ -4,7 +4,7 @@ import Html exposing (Html, div, text)
 import Html.Attributes exposing (style, class)
 import Game.Board.View exposing (cellBtnCont, cellOuterCont)
 import Util.Types exposing (..)
-import Util.View exposing ((=>), getHexColor)
+import Util.View exposing (..)
 import Ctrl.View exposing (gameBtns)
 import Styled exposing (..)
 
@@ -58,10 +58,8 @@ playerToken player =
 
 plyrTopCont : StyledComponent
 plyrTopCont =
-    styled div
-        [ display flex_
-        , flex (int 5) (int 0) auto
-        , flexDirection column
+    styled columnWrap
+        [ flex (int 5) (int 0) auto
         , alignContent flexStart
         , alignItems stretch
         , border (px 2) solid (hex "00aa00")
@@ -70,11 +68,8 @@ plyrTopCont =
 
 tokenCont : StyledComponent
 tokenCont =
-    styled div
-        [ display flex_
-        , flex (int 3) (int 0) (percent 40)
-        , justifyContent center
-        , alignItems center
+    styled centerWrap
+        [ flex (int 3) (int 0) (percent 40)
         , border (px 2) solid (hex "aa0000")
         , backgroundColor (hex "1e0812")
         ]
@@ -82,11 +77,8 @@ tokenCont =
 
 nameCont : StyledComponent
 nameCont =
-    styled div
-        [ display flex_
-        , flex (int 2) (int 0) (percent 30)
-        , justifyContent center
-        , alignItems center
+    styled centerWrap
+        [ flex (int 2) (int 0) (percent 30)
         , color (hex "1e0812")
         , fontSize (em 5)
         , backgroundColor (hex "d8d8d8")
@@ -96,11 +88,8 @@ nameCont =
 
 scoreCont : StyledComponent
 scoreCont =
-    styled div
-        [ display flex_
-        , flex (int 1) (int 0) (percent 30)
-        , justifyContent center
-        , alignItems center
+    styled centerWrap
+        [ flex (int 1) (int 0) (percent 30)
         , color (hex "fafafa")
         , backgroundColor (hex "1e0812")
         , textShadow zero zero (px 20) (hex "b61e64")
@@ -111,10 +100,8 @@ scoreCont =
 
 plyrCont : StyledComponent
 plyrCont =
-    styled div
-        [ display flex_
-        , flexDirection column
-        , flex (int 1) (int 0) auto
+    styled columnWrap
+        [ flex (int 1) (int 0) auto
         , backgroundColor (hex "d8d8d8")
         ]
 

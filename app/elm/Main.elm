@@ -3,6 +3,7 @@ module Main exposing (..)
 import Html exposing (Html, div)
 import Random exposing (initialSeed)
 import Return as R exposing (Return)
+import Styled exposing (..)
 import Break.View exposing (breakUI)
 import Config.State exposing (updateConfig)
 import Config.View exposing (cfgUI)
@@ -10,7 +11,7 @@ import Ctrl.State as Btn
 import Game.Board.State exposing (updateGame)
 import Game.View exposing (gameUI)
 import Util.Types exposing (..)
-import Styled exposing (..)
+import Util.View exposing (..)
 
 
 type alias Flags =
@@ -27,10 +28,8 @@ init { randSeed } =
 
 viewCont : StyledComponent
 viewCont =
-    styled div
+    styled stretchWrap
         [ display flex_
-        , width (vw 100)
-        , height (vh 100)
         , backgroundColor (hex "1e0812")
         ]
 

@@ -1,11 +1,12 @@
 module Game.View exposing (gameUI)
 
 import Html exposing (..)
+import Styled exposing (..)
 import Util.Types exposing (..)
+import Util.View exposing (..)
 import Game.Player.View exposing (..)
 import Game.Message.View as Message
 import Game.Board.View as Board
-import Styled exposing (..)
 
 
 gameUI : InGameState -> Html Action
@@ -27,17 +28,9 @@ gameView { board, message } =
 
 gameUICont : StyledComponent
 gameUICont =
-    styled div
-        [ display flex_
-        , width (percent 100)
-        , height (percent 100)
-        ]
+    styled stretchWrap [ display flex_ ]
 
 
 gameViewCont : StyledComponent
 gameViewCont =
-    styled div
-        [ display flex_
-        , flexDirection column
-        , justifyContent spaceAround
-        ]
+    styled columnWrap [ justifyContent spaceAround ]

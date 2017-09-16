@@ -2,10 +2,11 @@ module Ctrl.View exposing (..)
 
 import Html exposing (Html, div, text)
 import Html.Events exposing (onClick)
-import Ctrl.Types exposing (..)
-import Util.Types exposing (..)
 import Styled exposing (..)
 import Styled.Cursors exposing (pointer)
+import Ctrl.Types exposing (..)
+import Util.Types exposing (..)
+import Util.View exposing (..)
 
 
 gameBtns : Html Action
@@ -57,10 +58,8 @@ gameBtnsCont =
 
 breakBtnsCont : StyledComponent
 breakBtnsCont =
-    styled div
+    styled stretchWrap
         [ display flex_
-        , width (percent 100)
-        , height (percent 100)
         , justifyContent spaceAround
         , alignItems center
         ]
@@ -68,22 +67,16 @@ breakBtnsCont =
 
 cfgBtnsCont : StyledComponent
 cfgBtnsCont =
-    styled div
-        [ display flex_
-        , justifyContent center
-        , alignItems center
-        , backgroundColor (hex "d8d8d8")
+    styled centerWrap
+        [ backgroundColor (hex "d8d8d8")
         , flex (int 1) (int 0) auto
         ]
 
 
 btnCont : StyledComponent
 btnCont =
-    styled div
-        [ display flex_
-        , justifyContent center
-        , alignContent center
-        , cursor pointer
+    styled centerWrap
+        [ cursor pointer
         , backgroundColor (hex "b61e64")
         , color (hex "fafafa")
         , borderRadius (px 5)

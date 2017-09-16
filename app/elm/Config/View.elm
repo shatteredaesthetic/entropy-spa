@@ -3,14 +3,15 @@ module Config.View exposing (cfgUI)
 import Html exposing (Html, label, div, h1, h2, h3, text, p, a, input)
 import Html.Attributes exposing (style, class, for, name, href, value, type_)
 import Html.Events exposing (onInput)
-import Util.Types exposing (..)
-import Ctrl.View exposing (cfgBtns)
 import Styled exposing (..)
+import Util.Types exposing (..)
+import Util.View exposing (..)
+import Ctrl.View exposing (cfgBtns)
 
 
 cfgUI : ConfigState -> Html Action
 cfgUI state =
-    container []
+    cfgOuterCont []
         [ cfgCont []
             [ title [] [ text "Entropy" ]
             , namesPanel state
@@ -63,23 +64,18 @@ instructions =
         ]
 
 
-container : StyledComponent
-container =
-    styled div
-        [ display flex_
-        , justifyContent center
-        , alignContent center
-        , width (percent 100)
+cfgOuterCont : StyledComponent
+cfgOuterCont =
+    styled centerWrap
+        [ width (percent 100)
         , height (percent 100)
         ]
 
 
 cfgCont : StyledComponent
 cfgCont =
-    styled div
-        [ display flex_
-        , flexDirection column
-        , height (percent 100)
+    styled columnWrap
+        [ height (percent 100)
         , width (percent 70)
         , justifyContent spaceAround
         , alignItems stretch
@@ -88,11 +84,8 @@ cfgCont =
 
 title : StyledComponent
 title =
-    styled div
-        [ display flex_
-        , justifyContent center
-        , alignContent center
-        , flex (int 2) (int 0) auto
+    styled centerWrap
+        [ flex (int 2) (int 0) auto
         , color (hex "b61e64")
         , backgroundColor (hex "d8d8d8")
         , fontWeight (int 600)
@@ -121,25 +114,17 @@ lblStyle =
 
 plyrCfgCont : StyledComponent
 plyrCfgCont =
-    styled div
-        [ display flex_
-        , justifyContent center
-        , alignContent center
-        , flexDirection column
-        ]
+    styled centerWrap [ flexDirection column ]
 
 
 descCont : StyledComponent
 descCont =
-    styled div
-        [ display flex_
-        , flexDirection column
-        , flex (int 4) (int 0) auto
+    styled columnWrap
+        [ flex (int 4) (int 0) auto
         , backgroundColor (hex "d8d8d8")
         ]
 
 
 anchComp : StyledComponent
 anchComp =
-    styled a
-        [ color (hex "b61e64") ]
+    styled a [ color (hex "b61e64") ]

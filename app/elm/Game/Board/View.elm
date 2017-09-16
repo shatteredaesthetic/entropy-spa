@@ -6,7 +6,7 @@ import Array
 import Maybe
 import Matrix exposing (Matrix)
 import Util.Types exposing (..)
-import Util.View exposing (getHexColor)
+import Util.View exposing (..)
 import Styled exposing (..)
 import Styled.Types exposing (Rule)
 
@@ -51,11 +51,8 @@ boardCont =
 
 boardViewCont : StyledComponent
 boardViewCont =
-    styled div
-        [ display flex_
-        , justifyContent center
-        , alignContent center
-        , flex (int 4) (int 0) auto
+    styled centerWrap
+        [ flex (int 4) (int 0) auto
         , backgroundColor (hex "1e0812")
         ]
 
@@ -73,12 +70,9 @@ cellBtnCont col =
 
 cellOuterCont : Bool -> StyledComponent
 cellOuterCont hghlgt =
-    styled div <|
+    styled centerWrap <|
         List.concat
-            [ [ display flex_
-              , justifyContent center
-              , alignItems center
-              , flex (int 1) (int 0) auto
+            [ [ flex (int 1) (int 0) auto
               , borderRadius (px 4)
               , backgroundColor (hex "1e0812")
               , border (px 1) solid (hex "8d8d8d")
@@ -89,11 +83,7 @@ cellOuterCont hghlgt =
 
 rowCont : StyledComponent
 rowCont =
-    styled div
-        [ display flex_
-        , flexDirection column
-        , flex (int 1) (int 0) auto
-        ]
+    styled columnWrap [ flex (int 1) (int 0) auto ]
 
 
 highlightStyle : Bool -> List Rule

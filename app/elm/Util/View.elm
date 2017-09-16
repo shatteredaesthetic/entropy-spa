@@ -2,6 +2,7 @@ module Util.View exposing (..)
 
 import Html exposing (Html, Attribute, div)
 import Util.Types exposing (..)
+import Styled exposing (..)
 
 
 htmlFromAttributes : List (Attribute Action) -> Html Action
@@ -47,32 +48,59 @@ tileToString colour =
             "EMPTY"
 
 
+
+{-
+   -- #f21f1f
+   -- #f78818
+   -- #5fd813
+   -- #1953e5
+   -- #da1ee8
+   -- #1e0812
+-}
+
+
 getHexColor : Colour -> String
 getHexColor colour =
     case colour of
         Red ->
             "f21f1f"
 
-        -- #f21f1f
         Orange ->
             "f78818"
 
-        -- #f78818
         Green ->
             "5fd813"
 
-        -- #5fd813
         Blue ->
             "1953e5"
 
-        -- #1953e5
         Violet ->
             "da1ee8"
 
-        -- #da1ee8
         NoTile ->
             "1e0812"
 
 
+columnWrap : StyledComponent
+columnWrap =
+    styled div
+        [ display flex_
+        , flexDirection column
+        ]
 
--- #1e0812
+
+centerWrap : StyledComponent
+centerWrap =
+    styled div
+        [ display flex_
+        , justifyContent center
+        , alignContent center
+        ]
+
+
+stretchWrap : StyledComponent
+stretchWrap =
+    styled div
+        [ width (percent 100)
+        , height (percent 100)
+        ]
