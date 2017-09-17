@@ -64,11 +64,7 @@ makeBoard =
             Matrix.repeat 5 5 NoTile
 
         f x y el =
-            { x = x
-            , y = y
-            , highlight = False
-            , colour = el
-            }
+            Cell el False x y
     in
         Matrix.indexedMap f m
 

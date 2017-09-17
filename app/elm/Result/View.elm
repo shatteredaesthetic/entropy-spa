@@ -49,9 +49,9 @@ middleWrap =
 winnerWrap : StyledComponent
 winnerWrap =
     styled centerWrap
-        [ color (hex "98dafc")
-        , backgroundColor (hex "312c32")
-        , textShadow zero zero (px 10) (hex "daad86")
+        [ color (hex "faf9f9")
+        , backgroundColor (hex "1c1c38")
+        , textShadow zero zero (px 10) (hex "870d3a")
         , fontSize (em 5)
         ]
 

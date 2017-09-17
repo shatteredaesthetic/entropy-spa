@@ -150,10 +150,10 @@ plyrWrap =
 nameWrap : StyledComponent
 nameWrap =
     styled centerWrap
-        [ color (hex "98dafc")
+        [ color (hex "faf9f9")
         , flex (int 1) (int 0) (percent 35)
-        , textShadow zero zero (px 10) (hex "feffff")
-        , backgroundColor (hex "312c32")
+        , textShadow zero zero (px 10) (hex "870d3a")
+        , backgroundColor (hex "1c1c38")
         , fontSize (em 5)
         , paddingBottom (Styled.rem 1)
         , width (percent 100)
@@ -163,10 +163,10 @@ nameWrap =
 scoreWrap : StyledComponent
 scoreWrap =
     styled centerWrap
-        [ color (hex "312c32")
+        [ color (hex "1c1c38")
         , flex (int 2) (int 0) (percent 65)
-        , textShadow zero zero (px 10) (hex "daad86")
-        , backgroundColor (hex "98dafc")
+        , textShadow zero zero (px 10) (hex "224f75")
+        , backgroundColor (hex "777f91")
         , fontSize (em 8)
         , width (percent 100)
         ]

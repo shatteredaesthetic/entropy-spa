@@ -1,10 +1,12 @@
 module Util.Lenses exposing (..)
 
 import Monocle.Lens as Lens exposing (Lens)
-import Monocle.Optional as Op exposing (Optional)
 import Random exposing (Seed)
 import Util.Types exposing (..)
 import Game.Message.Types as Message
+
+
+-- Player Lenses
 
 
 p1L : Lens InGameState Player
@@ -47,6 +49,10 @@ p2RoleL =
     Lens.compose p2L roleL
 
 
+
+-- Message Lens
+
+
 msgL : Lens GameState Message.Model
 msgL =
     let
@@ -73,6 +79,10 @@ msgL =
                     GameOver st
     in
         Lens get set
+
+
+
+-- Tiles Lenses
 
 
 tilesL : Lens InGameState TileState
@@ -135,26 +145,10 @@ seedL =
     Lens.compose tilesL tileSeedL
 
 
+
+-- Board Lens
+
+
 boardL : Lens InGameState Board
 boardL =
     Lens .board <| \b m -> { m | board = b }
-
-
-composeOpt : Lens a b -> Optional b c -> Optional a c
-composeOpt lens opt =
-    let
-        set c a =
-            lens.get a
-                |> opt.set c
-                |> (\b -> lens.set b a)
-
-        getOption a =
-            let
-                x =
-                    lens.get a
-            in
-                a
-                    |> lens.get
-                    |> opt.getOption
-    in
-        Optional getOption set

@@ -72,13 +72,14 @@ breakBtnsWrap =
         [ display flex_
         , justifyContent spaceAround
         , alignItems center
+        , backgroundColor (hex "1c1c38")
         ]
 
 
 cfgBtnsWrap : StyledComponent
 cfgBtnsWrap =
     styled centerWrap
-        [ backgroundColor (hex "d8d8d8")
+        [ backgroundColor (hex "777f91")
         , flex (int 1) (int 0) auto
         ]
 
@@ -86,7 +87,7 @@ cfgBtnsWrap =
 goBtnsWrap : StyledComponent
 goBtnsWrap =
     styled centerWrap
-        [ backgroundColor (hex "312c32")
+        [ backgroundColor (hex "1c1c38")
         , flex (int 1) (int 0) (percent 25)
         ]
 
@@ -95,9 +96,9 @@ btnWrap : StyledComponent
 btnWrap =
     styled centerWrap
         [ cursor pointer
-        , backgroundColor (hex "98dafc")
-        , color (hex "312c32")
+        , backgroundColor (hex "224f75")
+        , color (hex "faf9f9")
         , borderRadius (px 5)
         , padding (px 10)
-        , border (px 1) solid (hex "312c32")
+        , border (px 1) solid (hex "1c1c38")
         ]

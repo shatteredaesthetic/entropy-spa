@@ -38,7 +38,7 @@ update msg state =
                     InGame
                         { board = makeBoard
                         , player1 = Player s.player1.name Chaos 0
-                        , player2 = Player s.player2.name Chaos 0
+                        , player2 = Player s.player2.name Order 0
                         , turn = Chaos
                         , tiles = randomTile <| resetTiles s.tiles.seed
                         , message = Message.init

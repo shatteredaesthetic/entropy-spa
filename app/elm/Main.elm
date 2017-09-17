@@ -32,7 +32,7 @@ viewCont =
         [ display flex_
         , width (vw 100)
         , height (vh 100)
-        , backgroundColor (hex "daad86")
+        , backgroundColor (hex "224f75")
         ]
 
 

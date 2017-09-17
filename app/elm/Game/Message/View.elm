@@ -22,10 +22,11 @@ msgWrap =
         , flex (int 1) (int 0) (percent 25)
         , justifyContent flexStart
         , alignContent center
-        , backgroundColor (hex "312c32")
-        , color (hex "feffff")
+        , backgroundColor (hex "1c1c38")
+        , color (hex "faf9f9")
         , fontFamily monospace
         , fontSize (em 1.5)
+        , padding (Styled.rem 1)
         ]
 
 

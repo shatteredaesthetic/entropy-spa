@@ -56,7 +56,7 @@ boardViewWrap =
         , alignItems flexEnd
         , justifyContent center
         , flex (int 3) (int 0) (percent 75)
-        , backgroundColor (hex "312c32")
+        , backgroundColor (hex "1c1c38")
         ]
 
 
@@ -77,8 +77,8 @@ cellOuterWrap hghlgt =
         List.concat
             [ [ flex (int 1) (int 0) auto
               , borderRadius (px 4)
-              , backgroundColor (hex "312c32")
-              , border (px 1) solid (hex "daad86")
+              , backgroundColor (hex "1c1c38")
+              , border (px 1) solid (hex "777f91")
               ]
             , highlightStyle hghlgt
             ]
@@ -93,7 +93,7 @@ highlightStyle : Bool -> List Rule
 highlightStyle hghlgt =
     case hghlgt of
         True ->
-            [ backgroundColor (hex "98dafc") ]
+            [ backgroundColor (hex "faf9f9") ]
 
         False ->
             []

@@ -88,9 +88,9 @@ title : StyledComponent
 title =
     styled centerWrap
         [ flex (int 2) (int 0) auto
-        , color (hex "98dafc")
-        , textShadow (px 0) (px 0) (px 40) (hex "b88b64")
-        , backgroundColor (hex "d8d8d8")
+        , color (hex "224f75")
+        , textShadow (px 0) (px 0) (px 40) (hex "870d3a")
+        , backgroundColor (hex "777f91")
         , fontWeight (int 600)
         , fontSize (em 3)
         ]
@@ -103,16 +103,17 @@ namesWrap =
         , alignItems center
         , justifyContent spaceAround
         , flex (int 3) (int 0) auto
-        , backgroundColor (hex "d8d8d8")
-        , color (hex "312c32")
+        , backgroundColor (hex "777f91")
+        , color (hex "1c1c38")
         ]
 
 
 lblStyle : StyledComponent
 lblStyle =
     styled label
-        [ color (hex "daad86")
+        [ color (hex "870d3a")
         , fontWeight (int 600)
+        , fontSize (em 1.3)
         ]
 
 
@@ -128,7 +129,7 @@ descWrap =
         , justifyContent center
         , alignItems center
         , flex (int 4) (int 0) auto
-        , color (hex "312c32")
+        , color (hex "1c1c38")
         ]
 
 
@@ -138,12 +139,12 @@ instInnerWrap =
         [ alignItems center
         , justifyContent flexStart
         , width (percent 90)
-        , backgroundColor (hex "feffff")
+        , backgroundColor (hex "faf9f9")
         , padding2 zero (Styled.rem 1)
-        , boxShadow (px 5) (px 5) (px 13) (px 1) (hex "312c32")
+        , boxShadow (px 5) (px 5) (px 13) (px 1) (hex "1c1c38")
         ]
 
 
 anchComp : StyledComponent
 anchComp =
-    styled a [ color (hex "daad86") ]
+    styled a [ color (hex "870d3a") ]
